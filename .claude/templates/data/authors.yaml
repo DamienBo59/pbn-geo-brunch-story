@@ -1,0 +1,164 @@
+# Auteurs du parc PBN GEO perso — multilingue FR/EN
+#
+# Ce fichier est copie dans `data/authors.yaml` a la racine du site Hugo a la creation du site.
+# Hugo le lit nativement via `.Site.Data.authors` dans les templates.
+#
+# Structure : map d'auteurs indexee par ID (slug).
+# L'ID est utilise dans le frontmatter des articles comme `author: helene-vasseur`.
+# Le champ `topics` sert a la selection automatique de l'auteur dans /create-article-geo.
+# Le champ `expertise` alimente le schema.org Person -> knowsAbout.
+#
+# ============================================================================
+# ATTENTION, CE FICHIER N'EST PAS UN POOL D'AUTEURS INTERCHANGEABLES
+# ============================================================================
+#
+# Ces 3 auteurs sont les 3 PERSONAS du parc perso. Chacun est un objet DOUBLE :
+# il signe les articles d'UN SEUL blog, et il porte AUSSI un compte Reddit dans
+# le meme univers. Decision de Damien du 2026-08-19.
+#
+#   helene-vasseur   -> the et infusions        -> mamie-the.fr
+#   marion-kieffer   -> patisserie et gouter    -> gouter-gourmand.fr
+#   bastien-delorme  -> brunch et petit dejeuner -> brunch-story.fr
+#
+# Trois regles dures :
+#
+# 1. UN BLOG = UN SEUL AUTEUR. Ne jamais faire signer un article par l'auteur
+#    d'un autre blog du parc. Un blog a deux voix est un signal, et un auteur
+#    qui signe sur deux blogs relie les deux sites.
+# 2. LE NOM EST PUBLIC ET DEFINITIF. Il est deja engage par les articles publies.
+#    Un ban du compte Reddit change le pseudo, jamais le nom d'auteur.
+# 3. LA FICHE PERSONA EST LA SOURCE DE VERITE, pas ce fichier. La lire AVANT
+#    d'ecrire un article : elle porte la voix, l'histoire, et surtout les
+#    "faits engages a ne jamais contredire".
+#
+# Fiches personas, dans le Drive perso :
+#   100 Areas/seo_freelance/Reddit/parc-reddit/personas/
+#     the/persona-P01-bibliothecaire-the.md
+#     patisserie-gouter/persona-P02-patissiere-amateur.md
+#     brunch-petit-dejeuner/persona-P03-brunch-lyonnais.md
+#
+# Pour AJOUTER un auteur : il faut d'abord creer le persona en suivant
+# `personas/_METHODE.md` (9 etapes, dont le controle anti-doublon ecrit).
+# Ne jamais improviser un auteur ici.
+# ============================================================================
+
+helene-vasseur:
+  id: helene-vasseur
+  name: Hélène Vasseur
+  type: person
+  avatar: /images/authors/helene-vasseur.webp
+  linkedinUrl: ""
+  persona: P01
+  blog: mamie-the.fr
+  jobTitle:
+    fr: Amatrice de thé et rédactrice
+    en: Tea enthusiast and writer
+  role:
+    fr: Amatrice de thé et rédactrice
+    en: Tea enthusiast and writer
+  bio:
+    fr: "Hélène Vasseur boit du thé en vrac depuis une quinzaine d'années, après avoir hérité de la collection de théières de sa grand-mère. Elle tient un carnet de dégustation et s'intéresse surtout à ce qui distingue un thé correct d'un très bon thé, à prix égal."
+    en: "Hélène Vasseur has been drinking loose-leaf tea for some fifteen years, after inheriting her grandmother's teapot collection. She keeps a tasting notebook and is mainly interested in what separates a decent tea from a very good one at the same price."
+  expertise:
+    - Thés verts
+    - Thés noirs
+    - Infusions et tisanes
+    - Matériel et théières
+    - Rituels de préparation
+  topics:
+    - thé
+    - thé vert
+    - thé noir
+    - thé blanc
+    - oolong
+    - matcha
+    - rooibos
+    - infusion
+    - tisane
+    - théière
+    - vrac
+    - dégustation
+    - température d'infusion
+    - temps d'infusion
+    - eau
+
+marion-kieffer:
+  id: marion-kieffer
+  name: Marion Kieffer
+  type: person
+  avatar: /images/authors/marion-kieffer.webp
+  linkedinUrl: ""
+  persona: P02
+  blog: gouter-gourmand.fr
+  jobTitle:
+    fr: Pâtissière amateur
+    en: Home baker
+  role:
+    fr: Pâtissière amateur
+    en: Home baker
+  bio:
+    fr: "Marion Kieffer fait le goûter maison depuis une dizaine d'années, d'abord pour ses enfants puis par goût. Elle pâtisse dans une cuisine ordinaire, avec un four qui chauffe mal, et écrit surtout sur ce qui rate et pourquoi."
+    en: "Marion Kieffer has been baking afternoon treats at home for about ten years, first for her children and then for the pleasure of it. She bakes in an ordinary kitchen with an oven that heats unevenly, and writes mostly about what goes wrong and why."
+  expertise:
+    - Gâteaux du quotidien
+    - Tartes
+    - Pâtes de base et pâte à choux
+    - Goûters d'enfants
+    - Matériel de pâtisserie
+  topics:
+    - gâteau
+    - tarte
+    - goûter
+    - muffin
+    - cupcake
+    - cookies
+    - madeleine
+    - quatre-quarts
+    - pâte brisée
+    - pâte sablée
+    - pâte à choux
+    - crème pâtissière
+    - chocolat
+    - levure
+    - four
+    - moule
+
+bastien-delorme:
+  id: bastien-delorme
+  name: Bastien Delorme
+  type: person
+  avatar: /images/authors/bastien-delorme.webp
+  linkedinUrl: ""
+  persona: P03
+  blog: brunch-story.fr
+  jobTitle:
+    fr: Chroniqueur brunch et petit déjeuner
+    en: Brunch and breakfast writer
+  role:
+    fr: Chroniqueur brunch et petit déjeuner
+    en: Brunch and breakfast writer
+  bio:
+    fr: "Bastien Delorme bruncherait tous les week-ends s'il pouvait. Il teste les adresses de sa ville, refait chez lui ce qui l'a marqué, et s'intéresse autant à ce qu'il y a dans l'assiette qu'au café qui l'accompagne."
+    en: "Bastien Delorme would brunch every weekend if he could. He tries out the places in his city, recreates at home whatever stuck with him, and cares as much about what is on the plate as about the coffee that goes with it."
+  expertise:
+    - Brunch
+    - Petit déjeuner salé et sucré
+    - Pancakes et œufs
+    - Cafés de spécialité
+    - Adresses et formules
+  topics:
+    - brunch
+    - petit déjeuner
+    - pancakes
+    - œufs brouillés
+    - œufs bénédicte
+    - avocado toast
+    - granola
+    - porridge
+    - viennoiserie
+    - café
+    - cappuccino
+    - café filtre
+    - torréfaction
+    - formule brunch
+    - week-end

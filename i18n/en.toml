@@ -1,0 +1,43 @@
+[skip_to_content]
+other = "Skip to content"
+[explore_blog]
+other = "Explore the blog"
+[our_categories]
+other = "Our categories"
+[latest_articles]
+other = "Latest articles"
+[read_more]
+other = "Read more"
+[article]
+one = "article"
+other = "articles"
+[sitemap_page]
+other = "Site map"
+[navigation]
+other = "Navigation"
+[categories]
+other = "Categories"
+[all_rights]
+other = "All rights reserved."
+[not_found_title]
+other = "Page not found"
+[not_found_text]
+other = "The page you are looking for does not exist or has been moved."
+[back_home]
+other = "Back to home"
+[see_articles]
+other = "See the articles"
+[main_nav]
+other = "Main navigation"
+[mobile_nav]
+other = "Mobile navigation"
+[sitemap_slug]
+other = "site-map/"
+[sitemap_intro]
+other = "All the pages of"
+[hero_badge]
+other = "Brunch, bill included"
+[hero_title]
+other = "What is worth the price of brunch, and what is better made at home"
+[hero_description]
+other = "Every week, one piece of brunch put under the microscope: what justifies the bill, what takes ten minutes at home, and the coffee everyone forgets to look at."

@@ -1,0 +1,586 @@
+# Roadmap editoriale evergreen — skill /create-article-auto
+#
+# Ce fichier alimente la skill /create-article-auto (publication automatique
+# d'articles evergreen SEO, bilingue FR + EN).
+#
+# EMPLACEMENT
+# -----------
+# Ce fichier doit vivre **a la racine du repo du blog** (et PAS dans .claude/).
+# Raison : les fichiers dans .claude/ sont traites comme sensibles par Claude Code
+# et declenchent un popup a chaque edit, non contournable, qui bloquerait les
+# runs cron de nuit.
+#
+# FONCTIONNEMENT
+# --------------
+# A chaque execution (planifiee via /schedule ou manuelle), l'agent :
+#   1. Filtre les entrees avec status: todo et scheduled_date <= today
+#   2. Prend la plus ancienne
+#   3. Analyse la SERP sur le kw (SerpAPI via curl direct sur l'API publique ;
+#      pas de fetch des pages concurrentes, le sandbox cloud les bloque en 503)
+#   4. Genere l'article FR + EN en full auto (Sonnet 4.6 par defaut)
+#   5. Publie sur GitHub (push main direct, GitHub Actions deploie)
+#   6. Met a jour l'entree ci-dessous : status: done, published_date, URLs
+#
+# En cas de blocage (SERP indispo, image KO, build KO, push rejete 3x) :
+#   - status passe a failed
+#   - error est rempli avec le message
+#   - l'entree n'est PAS retentee automatiquement (intervention humaine requise)
+#
+# COMMENT AJOUTER UNE ENTREE (humain)
+# -----------------------------------
+# 1. Copier le bloc "exemple" ci-dessous a la fin de la liste `articles`
+# 2. Renseigner : kw, category (doit matcher hugo.toml), scheduled_date
+# 3. Renseigner volume et kd (optionnels, juste pour prioriser)
+# 4. Laisser les autres champs a null (remplis par l'agent)
+# 5. Commit + push. La prochaine execution cron eligible prendra l'entree
+#
+# DEBLOQUER UNE ENTREE FAILED
+# ---------------------------
+# 1. Lire le message dans `error:` pour comprendre la cause
+# 2. Corriger si besoin (kw trop concurrentiel, category invalide, etc.)
+# 3. Repasser `status: todo` et vider `error: null`
+# 4. Commit + push, l'agent reprendra l'entree au prochain run
+#
+# CHAMPS EDITABLES PAR L'HUMAIN
+# -----------------------------
+#   kw              (obligatoire) Mot-cle principal SEO cible. Langue principale du blog.
+#   category        (obligatoire) Categorie du blog. Doit matcher une categorie definie
+#                                 dans le hugo.toml (en langue principale).
+#   volume          (informatif)  Volume mensuel de recherche. Aide l'humain a prioriser,
+#                                 ignore par l'agent. Laisser null si inconnu.
+#   kd              (informatif)  Keyword Difficulty 0-100. Aide l'humain a doser l'ambition,
+#                                 ignore par l'agent. Laisser null si inconnu.
+#   scheduled_date  (obligatoire) Date a partir de laquelle l'agent peut publier.
+#                                 Format : YYYY-MM-DD.
+#   status          todo | done | failed. Passer un failed en todo apres correction
+#                                 manuelle pour relancer.
+#
+# CHAMPS REMPLIS PAR L'AGENT (ne pas toucher sauf pour debloquer un failed)
+# -----------------------------------------------------------------------
+#   published_date    YYYY-MM-DD reel de publication
+#   published_url_fr  URL complete de la version FR
+#   published_url_en  URL complete de la version EN
+#   error             message d'erreur si status: failed
+#
+# AJOUT D'UNE NOUVELLE ENTREE
+# ---------------------------
+# Copier le bloc "exemple" ci-dessous, remplir kw, category, scheduled_date,
+# laisser les autres champs tels quels.
+#
+# BONNES PRATIQUES
+# ----------------
+# - Espacer les scheduled_date selon la frequence de publication du blog
+#   (ex: 2x/semaine = mardi et vendredi).
+# - Eviter 2 KW cannibalisants dans des dates rapprochees.
+# - Verifier que la category existe bien dans hugo.toml avant d'ajouter.
+# - Eviter les KW trop concurrentiels pour un blog qui demarre (preferer la
+#   longue traine).
+#
+# REGLE DE DIVERSITE DES CATEGORIES (obligatoire)
+# -----------------------------------------------
+# L'ordre chronologique de publication doit alterner les categories pour
+# proposer un flux varie aux lecteurs et aux moteurs.
+#
+# Contraintes :
+#   1. JAMAIS 2 articles consecutifs (par scheduled_date) de la meme categorie.
+#   2. Sur toute fenetre glissante de 5 articles consecutifs, au moins
+#      3 categories distinctes doivent etre representees.
+#   3. Si le blog n'a pas assez de categories pour respecter la regle
+#      (cas extreme : 2 categories), appliquer l'alternance stricte 1 sur 2.
+#
+# Cette regle s'applique a la creation de la roadmap et a chaque ajout
+# d'entree. Si tu remplis a la main, trie par categorie et entrelace.
+# Si tu utilises /create-article-seo, la skill doit valider et reordonner
+# automatiquement les scheduled_date pour respecter la contrainte.
+
+articles:
+  - kw: "recette petit déjeuner healthy rapide"
+    category: "Petit déjeuner sain"
+    volume: 355
+    kd: null
+    scheduled_date: "2026-09-08"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pancakes farine de chataigne"
+    category: "Pancakes et sucré"
+    volume: 217
+    kd: null
+    scheduled_date: "2026-09-11"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "idee brunch simple"
+    category: "Organiser un brunch"
+    volume: 765
+    kd: null
+    scheduled_date: "2026-09-15"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "boissons brunch"
+    category: "Boissons du matin"
+    volume: 110
+    kd: null
+    scheduled_date: "2026-09-18"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "oeufs salés"
+    category: "Oeufs et salé"
+    volume: 110
+    kd: null
+    scheduled_date: "2026-09-22"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "muesli maison healthy"
+    category: "Petit déjeuner sain"
+    volume: 390
+    kd: null
+    scheduled_date: "2026-09-25"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette pancake soufflé"
+    category: "Pancakes et sucré"
+    volume: 260
+    kd: null
+    scheduled_date: "2026-09-29"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "plateau brunch salé"
+    category: "Organiser un brunch"
+    volume: 140
+    kd: null
+    scheduled_date: "2026-10-02"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "smoothie aux framboises"
+    category: "Boissons du matin"
+    volume: 2182
+    kd: null
+    scheduled_date: "2026-10-06"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "tartine beurre-confiture"
+    category: "Oeufs et salé"
+    volume: 291
+    kd: null
+    scheduled_date: "2026-10-09"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "bagel healthy"
+    category: "Petit déjeuner sain"
+    volume: 260
+    kd: null
+    scheduled_date: "2026-10-13"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pancake ig bas"
+    category: "Pancakes et sucré"
+    volume: 720
+    kd: null
+    scheduled_date: "2026-10-16"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "brunch dimanche"
+    category: "Organiser un brunch"
+    volume: 1900
+    kd: null
+    scheduled_date: "2026-10-20"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "cappuccino maison"
+    category: "Boissons du matin"
+    volume: null
+    kd: null
+    scheduled_date: "2026-10-23"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "oeufs cocotte poireaux"
+    category: "Oeufs et salé"
+    volume: 554
+    kd: null
+    scheduled_date: "2026-10-27"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette porridge healthy"
+    category: "Petit déjeuner sain"
+    volume: 800
+    kd: null
+    scheduled_date: "2026-10-30"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pancakes sans sucre"
+    category: "Pancakes et sucré"
+    volume: 1182
+    kd: null
+    scheduled_date: "2026-11-03"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit déj salé"
+    category: "Organiser un brunch"
+    volume: 762
+    kd: null
+    scheduled_date: "2026-11-06"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "café filtre dosage"
+    category: "Boissons du matin"
+    volume: null
+    kd: null
+    scheduled_date: "2026-11-10"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "omelette poivron"
+    category: "Oeufs et salé"
+    volume: 1300
+    kd: null
+    scheduled_date: "2026-11-13"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "porridge overnight"
+    category: "Petit déjeuner sain"
+    volume: 3273
+    kd: null
+    scheduled_date: "2026-11-17"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette pancakes fromage blanc"
+    category: "Pancakes et sucré"
+    volume: 800
+    kd: null
+    scheduled_date: "2026-11-20"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "idee petit dej rapide"
+    category: "Organiser un brunch"
+    volume: 590
+    kd: null
+    scheduled_date: "2026-11-24"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "smoothie vert detox"
+    category: "Boissons du matin"
+    volume: 70
+    kd: null
+    scheduled_date: "2026-11-27"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "oeuf cocotte chorizo"
+    category: "Oeufs et salé"
+    volume: 1462
+    kd: null
+    scheduled_date: "2026-12-01"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "overnight oats recette"
+    category: "Petit déjeuner sain"
+    volume: 4200
+    kd: null
+    scheduled_date: "2026-12-04"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pancakes sans œufs"
+    category: "Pancakes et sucré"
+    volume: 756
+    kd: null
+    scheduled_date: "2026-12-08"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "brunch idées"
+    category: "Organiser un brunch"
+    volume: 1812
+    kd: null
+    scheduled_date: "2026-12-11"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "jus d'orange pressé maison"
+    category: "Boissons du matin"
+    volume: null
+    kd: null
+    scheduled_date: "2026-12-15"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "mayonnaise oeuf dur"
+    category: "Oeufs et salé"
+    volume: 2300
+    kd: null
+    scheduled_date: "2026-12-18"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pudding graine de chia"
+    category: "Petit déjeuner sain"
+    volume: 2182
+    kd: null
+    scheduled_date: "2026-12-22"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "d'où vient le croissant"
+    category: "Pancakes et sucré"
+    volume: 390
+    kd: null
+    scheduled_date: "2026-12-25"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "brunch maison"
+    category: "Organiser un brunch"
+    volume: 4909
+    kd: null
+    scheduled_date: "2026-12-29"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "chocolat chaud maison"
+    category: "Boissons du matin"
+    volume: null
+    kd: null
+    scheduled_date: "2027-01-01"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recettes avec blanc d'oeufs"
+    category: "Oeufs et salé"
+    volume: 5077
+    kd: null
+    scheduled_date: "2027-01-05"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pudding chia"
+    category: "Petit déjeuner sain"
+    volume: 4500
+    kd: null
+    scheduled_date: "2027-01-08"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "croissant et pain au chocolat"
+    category: "Pancakes et sucré"
+    volume: 390
+    kd: null
+    scheduled_date: "2027-01-12"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "brunch recette"
+    category: "Organiser un brunch"
+    volume: 7364
+    kd: null
+    scheduled_date: "2027-01-15"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "café glacé maison"
+    category: "Boissons du matin"
+    volume: null
+    kd: null
+    scheduled_date: "2027-01-19"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pancake banane oeuf"
+    category: "Oeufs et salé"
+    volume: 436
+    kd: null
+    scheduled_date: "2027-01-22"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "graine de chia recette"
+    category: "Petit déjeuner sain"
+    volume: 2900
+    kd: null
+    scheduled_date: "2027-01-26"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "viennoiserie au chocolat"
+    category: "Pancakes et sucré"
+    volume: 210
+    kd: null
+    scheduled_date: "2027-01-29"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "idees de petit dejeuner"
+    category: "Organiser un brunch"
+    volume: 1143
+    kd: null
+    scheduled_date: "2027-02-02"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette granola maison healthy"
+    category: "Petit déjeuner sain"
+    volume: 1400
+    kd: null
+    scheduled_date: "2027-02-05"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette bagel"
+    category: "Pancakes et sucré"
+    volume: 3500
+    kd: null
+    scheduled_date: "2027-02-09"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit dejeuner sain"
+    category: "Petit déjeuner sain"
+    volume: 9867
+    kd: null
+    scheduled_date: "2027-02-12"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "bagel pain"
+    category: "Pancakes et sucré"
+    volume: 4000
+    kd: null
+    scheduled_date: "2027-02-16"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit dej healthy"
+    category: "Petit déjeuner sain"
+    volume: 7364
+    kd: null
+    scheduled_date: "2027-02-19"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette croissant au beurre"
+    category: "Pancakes et sucré"
+    volume: 1455
+    kd: null
+    scheduled_date: "2027-02-23"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null

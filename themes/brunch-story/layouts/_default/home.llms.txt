@@ -1,0 +1,29 @@
+{{- $lang := .Site.Language.Lang -}}
+# {{ .Site.Title }}
+
+> {{ .Site.Params.description }}
+
+## {{ if eq $lang "en" }}About{{ else }}A propos{{ end }}
+
+{{ if eq $lang "en" -}}
+Brunch Story is an independent blog about brunch and breakfast, written by {{ (index .Site.Data.authors "bastien-delorme").name }}, {{ (index (index .Site.Data.authors "bastien-delorme").jobTitle "en") | lower }}. Every article is built on concrete benchmarks: quantities per person, temperatures, timings and costs, so that a reader can act on it the same morning.
+{{- else -}}
+Brunch Story est un blog independant sur le brunch et le petit dejeuner, ecrit par {{ (index .Site.Data.authors "bastien-delorme").name }}, {{ (index (index .Site.Data.authors "bastien-delorme").jobTitle "fr") | lower }}. Chaque article repose sur des reperes concrets : quantites par personne, temperatures, temps de cuisson et couts, pour etre applicable le matin meme.
+{{- end }}
+
+## {{ if eq $lang "en" }}Main content{{ else }}Contenu principal{{ end }}
+
+{{ range .Site.Taxonomies.categories -}}
+- [{{ .Page.Title }}]({{ .Page.Permalink }}) : {{ .Page.Description }} ({{ .Count }} {{ i18n "article" .Count }})
+{{ end }}
+## {{ if eq $lang "en" }}Articles{{ else }}Articles{{ end }}
+
+{{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse -}}
+- [{{ .Title }}]({{ .Permalink }}) : {{ .Description }}
+{{ end }}
+## {{ if eq $lang "en" }}Technical information{{ else }}Informations techniques{{ end }}
+
+- {{ if eq $lang "en" }}Generator{{ else }}Generateur{{ end }} : Hugo
+- {{ if eq $lang "en" }}Hosting{{ else }}Hebergement{{ end }} : GitHub Pages
+- Sitemap : {{ "sitemap.xml" | absLangURL }}
+- RSS : {{ "index.xml" | absLangURL }}

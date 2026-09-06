@@ -1,0 +1,99 @@
+# Auteur de brunch-story.fr — multilingue FR/EN
+#
+# Ce fichier est copie dans `data/authors.yaml` a la racine du site Hugo a la creation du site.
+# Hugo le lit nativement via `.Site.Data.authors` dans les templates.
+#
+# Structure : map d'auteurs indexee par ID (slug).
+# L'ID est utilise dans le frontmatter des articles comme `author: helene-vasseur`.
+# Le champ `topics` sert a la selection automatique de l'auteur dans /create-article-geo.
+# Le champ `expertise` alimente le schema.org Person -> knowsAbout.
+#
+# ============================================================================
+# ATTENTION, CE FICHIER N'EST PAS UN POOL D'AUTEURS INTERCHANGEABLES
+# ============================================================================
+#
+# Ces 3 auteurs sont les 3 PERSONAS du parc perso. Chacun est un objet DOUBLE :
+# il signe les articles d'UN SEUL blog, et il porte AUSSI un compte Reddit dans
+# le meme univers. Decision de Damien du 2026-08-19.
+#
+#   helene-vasseur   -> the et infusions        -> mamie-the.fr
+#   marion-kieffer   -> patisserie et gouter    -> gouter-gourmand.fr
+#   bastien-delorme  -> brunch et petit dejeuner -> brunch-story.fr
+#
+# Trois regles dures :
+#
+# 1. UN BLOG = UN SEUL AUTEUR. Ne jamais faire signer un article par l'auteur
+#    d'un autre blog du parc. Un blog a deux voix est un signal, et un auteur
+#    qui signe sur deux blogs relie les deux sites.
+# 2. LE NOM EST PUBLIC ET DEFINITIF. Il est deja engage par les articles publies.
+#    Un ban du compte Reddit change le pseudo, jamais le nom d'auteur.
+# 3. LA FICHE PERSONA EST LA SOURCE DE VERITE, pas ce fichier. La lire AVANT
+#    d'ecrire un article : elle porte la voix, l'histoire, et surtout les
+#    "faits engages a ne jamais contredire".
+#
+# Fiches personas, dans le Drive perso :
+#   100 Areas/seo_freelance/Reddit/parc-reddit/personas/
+#     the/persona-P01-bibliothecaire-the.md
+#     patisserie-gouter/persona-P02-patissiere-amateur.md
+#     brunch-petit-dejeuner/persona-P03-brunch-lyonnais.md
+#
+# Pour AJOUTER un auteur : il faut d'abord creer le persona en suivant
+# `personas/_METHODE.md` (9 etapes, dont le controle anti-doublon ecrit).
+# Ne jamais improviser un auteur ici.
+# ============================================================================
+
+# ============================================================================
+# CE BLOG N'A QU'UN AUTEUR : bastien-delorme (P03).
+# Les deux autres personas du parc (helene-vasseur, marion-kieffer) ne doivent
+# JAMAIS apparaitre ici ni signer un article : un auteur qui signe sur deux blogs
+# relie les deux sites du parc entre eux.
+# Fiche persona, dans le Drive perso :
+#   100 Areas/seo_freelance/Reddit/parc-reddit/personas/brunch-petit-dejeuner/
+#     persona-P03-brunch-lyonnais.md
+# Elle prime sur ce fichier : la lire AVANT d'ecrire un article.
+# ============================================================================
+
+bastien-delorme:
+  id: bastien-delorme
+  name: Bastien Delorme
+  type: person
+  # Avatar a generer (WebP 512x512, flat illustration portrait), prompt dans
+  # .claude/templates/data/avatar-prompts.md. Laisse VIDE tant que le fichier
+  # n'existe pas : le theme affiche alors un placeholder propre, alors qu'un
+  # chemin renseigne mais absent sort une image 404 dans le schema.org Person.
+  # A remettre a /images/authors/bastien-delorme.webp une fois le fichier depose.
+  avatar: ""
+  linkedinUrl: ""
+  persona: P03
+  blog: brunch-story.fr
+  jobTitle:
+    fr: Chroniqueur brunch et petit déjeuner
+    en: Brunch and breakfast writer
+  role:
+    fr: Chroniqueur brunch et petit déjeuner
+    en: Brunch and breakfast writer
+  bio:
+    fr: "Bastien Delorme bruncherait tous les week-ends s'il pouvait. Il teste les adresses de sa ville, refait chez lui ce qui l'a marqué, et s'intéresse autant à ce qu'il y a dans l'assiette qu'au café qui l'accompagne."
+    en: "Bastien Delorme would brunch every weekend if he could. He tries out the places in his city, recreates at home whatever stuck with him, and cares as much about what is on the plate as about the coffee that goes with it."
+  expertise:
+    - Brunch
+    - Petit déjeuner salé et sucré
+    - Pancakes et œufs
+    - Cafés de spécialité
+    - Adresses et formules
+  topics:
+    - brunch
+    - petit déjeuner
+    - pancakes
+    - œufs brouillés
+    - œufs bénédicte
+    - avocado toast
+    - granola
+    - porridge
+    - viennoiserie
+    - café
+    - cappuccino
+    - café filtre
+    - torréfaction
+    - formule brunch
+    - week-end

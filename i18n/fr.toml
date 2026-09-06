@@ -1,0 +1,43 @@
+[skip_to_content]
+other = "Aller au contenu"
+[explore_blog]
+other = "Explorer le blog"
+[our_categories]
+other = "Les rubriques"
+[latest_articles]
+other = "Derniers articles"
+[read_more]
+other = "Lire la suite"
+[article]
+one = "article"
+other = "articles"
+[sitemap_page]
+other = "Plan du site"
+[sitemap_slug]
+other = "plan-du-site/"
+[sitemap_intro]
+other = "Toutes les pages de"
+[navigation]
+other = "Navigation"
+[categories]
+other = "Rubriques"
+[all_rights]
+other = "Tous droits réservés."
+[not_found_title]
+other = "Page introuvable"
+[not_found_text]
+other = "La page que vous cherchez n'existe pas ou a été déplacée."
+[back_home]
+other = "Retour à l'accueil"
+[see_articles]
+other = "Voir les articles"
+[main_nav]
+other = "Navigation principale"
+[mobile_nav]
+other = "Navigation mobile"
+[hero_badge]
+other = "Le brunch, addition comprise"
+[hero_title]
+other = "Ce qui vaut le prix du brunch, et ce qui se refait mieux chez soi"
+[hero_description]
+other = "Chaque semaine, un morceau de brunch passé au crible : ce qui justifie l'addition, ce qui se refait en dix minutes à la maison, et le café que tout le monde oublie de regarder."

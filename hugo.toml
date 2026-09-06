@@ -1,0 +1,132 @@
+baseURL = "https://www.brunch-story.fr/"
+title = "Brunch Story"
+theme = "brunch-story"
+
+defaultContentLanguage = "fr"
+defaultContentLanguageInSubdir = false
+removePathAccents = true
+enableRobotsTXT = false
+buildFuture = false
+enableEmoji = false
+
+[languages]
+  [languages.fr]
+    locale = "fr-FR"
+    label = "Français"
+    weight = 1
+    title = "Brunch Story"
+    contentDir = "content/fr"
+    [languages.fr.params]
+      description = "Le brunch et le petit déjeuner passés au crible : ce qui vaut le prix au restaurant, ce qui se refait mieux chez soi, et le café qui va avec."
+
+  [languages.en]
+    locale = "en-US"
+    label = "English"
+    weight = 2
+    title = "Brunch Story"
+    contentDir = "content/en"
+    [languages.en.params]
+      description = "Brunch and breakfast, examined: what is worth paying for at a restaurant, what is better made at home, and the coffee that goes with it."
+
+[outputFormats]
+  [outputFormats.LLMS]
+    mediaType = "text/plain"
+    baseName = "llms"
+    isPlainText = true
+    rel = "alternate"
+    notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "LLMS"]
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+[[languages.fr.menus.main]]
+  name = "Accueil"
+  url = "/"
+  weight = 1
+[[languages.fr.menus.main]]
+  name = "Boissons du matin"
+  url = "/categories/boissons-du-matin/"
+  weight = 2
+[[languages.fr.menus.main]]
+  name = "Organiser un brunch"
+  url = "/categories/organiser-un-brunch/"
+  weight = 3
+[[languages.fr.menus.main]]
+  name = "Petit déjeuner sain"
+  url = "/categories/petit-dejeuner-sain/"
+  weight = 4
+[[languages.fr.menus.main]]
+  name = "Pancakes et sucré"
+  url = "/categories/pancakes-et-sucre/"
+  weight = 5
+[[languages.fr.menus.main]]
+  name = "Oeufs et salé"
+  url = "/categories/oeufs-et-sale/"
+  weight = 6
+[[languages.fr.menus.main]]
+  name = "Le Blog"
+  url = "/blog/"
+  weight = 99
+
+[[languages.en.menus.main]]
+  name = "Home"
+  url = "/en/"
+  weight = 1
+[[languages.en.menus.main]]
+  name = "Morning drinks"
+  url = "/en/categories/morning-drinks/"
+  weight = 2
+[[languages.en.menus.main]]
+  name = "Hosting a brunch"
+  url = "/en/categories/hosting-a-brunch/"
+  weight = 3
+[[languages.en.menus.main]]
+  name = "Healthy breakfast"
+  url = "/en/categories/healthy-breakfast/"
+  weight = 4
+[[languages.en.menus.main]]
+  name = "Pancakes and sweet"
+  url = "/en/categories/pancakes-and-sweet/"
+  weight = 5
+[[languages.en.menus.main]]
+  name = "Eggs and savoury"
+  url = "/en/categories/eggs-and-savoury/"
+  weight = 6
+[[languages.en.menus.main]]
+  name = "The Blog"
+  url = "/en/blog/"
+  weight = 99
+
+[params]
+  default_og_image = "/images/og-default.jpg"
+  logo = "/favicon.svg"
+  founding_year = "2026"
+  expertise = ["Brunch", "Petit déjeuner", "Cafés de spécialité"]
+  og_locale_alternate = "en_US"
+
+[related]
+  includeNewer = true
+  threshold = 80
+  [[related.indices]]
+    name = "categories"
+    weight = 100
+  [[related.indices]]
+    name = "tags"
+    weight = 80
+
+[markup]
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = true
+  [markup.goldmark.renderer]
+    unsafe = true
+
+[sitemap]
+  changefreq = "weekly"
+  filename = "sitemap.xml"
+  priority = 0.5

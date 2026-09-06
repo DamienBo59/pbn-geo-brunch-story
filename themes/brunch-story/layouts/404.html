@@ -1,0 +1,15 @@
+{{ define "main" }}
+
+<section class="error-page">
+    <div class="container">
+        <span class="error-code">404</span>
+        <h1>{{ i18n "not_found_title" }}</h1>
+        <p>{{ i18n "not_found_text" }}</p>
+        <div class="error-links">
+            <a href="{{ "/" | relURL }}" class="btn-primary">{{ i18n "back_home" }}</a>
+            <a href="{{ "blog/" | relURL }}" class="btn-outline">{{ i18n "see_articles" }}</a>
+        </div>
+    </div>
+</section>
+
+{{ end }}
