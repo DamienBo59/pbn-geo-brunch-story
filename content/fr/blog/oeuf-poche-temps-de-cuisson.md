@@ -6,7 +6,7 @@ date: "2026-09-06"
 lastmod: "2026-09-06"
 description: "Le temps de cuisson exact de l'œuf poché, la température de l'eau et les trois conditions qui évitent le blanc en filaments."
 categories: ["Oeufs et salé"]
-tags: ["œuf poché", "temps de cuisson", "œuf poché cuisson", "brunch salé", "œufs bénédicte"]
+tags: ["oeuf poché", "temps de cuisson", "oeuf poché cuisson", "brunch salé", "oeufs bénédicte"]
 author: "bastien-delorme"
 image: "/images/blog/oeuf-poche-temps-de-cuisson.webp"
 imageAlt: "Œuf poché au jaune coulant posé sur une tranche de pain grillé"
