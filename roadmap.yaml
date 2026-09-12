@@ -93,30 +93,86 @@
 # Si tu utilises /create-article-seo, la skill doit valider et reordonner
 # automatiquement les scheduled_date pour respecter la contrainte.
 
+
+# ==========================================================================
+# ROADMAP RECONSTRUITE LE 2026-09-12 SUR LE CORPUS DE SEPTEMBRE
+# --------------------------------------------------------------------------
+# L'ancienne roadmap (49 entrees) etait batie sur le corpus d'aout, soit
+# 87 mots-cles. Le corpus de septembre en compte 1 906, dont 632 en longue
+# traine reellement ciblable. Elle est donc remplacee, pas completee.
+#
+# Filtres appliques au corpus (voir la fiche mots-cles 2026-09 du Drive) :
+#   - 3 mots ou plus, volume entre 150 et 3 000, KGR < 0,6 quand il existe
+#   - frontiere gouter-gourmand.fr respectee : gateaux, cookies, tartes et
+#     galette des rois laisses a P02. Brioche et pain perdu restent ici
+#   - requetes produit a SERP tenue par les marques ecartees en frontal
+#     (granola, muesli, flocons d'avoine, graines de chia en requete nue)
+#   - local, marques, materiel et transactionnel retires
+#   - garde-fou cannibalisation passe contre les 9 articles publies, les
+#     49 entrees de l'ancienne roadmap et les 60 entrees entre elles
+#
+# Controles passes : 0 couple cannibalisant, 0 paire consecutive de meme
+# categorie, au moins 3 categories sur toute fenetre de 5 articles.
+#
+# 60 entrees, 12 par rubrique, 72 006 de volume mensuel cible,
+# du 2026-09-12 au 2027-03-23, cadence mardi et vendredi.
+# ==========================================================================
+
+
 articles:
-  - kw: "recette petit déjeuner healthy rapide"
-    category: "Petit déjeuner sain"
-    volume: 355
+  - kw: "comment faire un smoothie"
+    category: "Boissons du matin"
+    volume: 2636
     kd: null
-    scheduled_date: "2026-09-08"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    scheduled_date: "2026-09-12"
+    status: done
+    published_date: "2026-09-12"
+    published_url_fr: "https://www.brunch-story.fr/blog/comment-faire-un-smoothie/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/how-to-make-a-smoothie/"
     error: null
-  - kw: "pancakes farine de chataigne"
-    category: "Pancakes et sucré"
-    volume: 217
+  - kw: "recette avocado toast"
+    category: "Oeufs et salé"
+    volume: 1455
     kd: null
-    scheduled_date: "2026-09-11"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    scheduled_date: "2026-09-12"
+    status: done
+    published_date: "2026-09-12"
+    published_url_fr: "https://www.brunch-story.fr/blog/recette-avocado-toast/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/avocado-toast-recipe/"
     error: null
-  - kw: "idee brunch simple"
+  - kw: "plateau petit déjeuner"
     category: "Organiser un brunch"
-    volume: 765
+    volume: 1600
+    kd: null
+    scheduled_date: "2026-09-12"
+    status: done
+    published_date: "2026-09-12"
+    published_url_fr: "https://www.brunch-story.fr/blog/plateau-petit-dejeuner/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/breakfast-tray/"
+    error: null
+  - kw: "petit déjeuner IG bas"
+    category: "Petit déjeuner sain"
+    volume: 1900
+    kd: null
+    scheduled_date: "2026-09-12"
+    status: done
+    published_date: "2026-09-12"
+    published_url_fr: "https://www.brunch-story.fr/blog/petit-dejeuner-ig-bas/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/low-gi-breakfast/"
+    error: null
+  - kw: "gaufres croustillantes et moelleuses"
+    category: "Pancakes et sucré"
+    volume: 3000
+    kd: null
+    scheduled_date: "2026-09-12"
+    status: done
+    published_date: "2026-09-12"
+    published_url_fr: "https://www.brunch-story.fr/blog/gaufres-croustillantes-moelleuses/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/crisp-fluffy-waffles/"
+    error: null
+  - kw: "smoothie fruits rouges"
+    category: "Boissons du matin"
+    volume: 2769
     kd: null
     scheduled_date: "2026-09-15"
     status: todo
@@ -124,9 +180,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "boissons brunch"
-    category: "Boissons du matin"
-    volume: 110
+  - kw: "pain perdu sans oeuf"
+    category: "Oeufs et salé"
+    volume: 2417
     kd: null
     scheduled_date: "2026-09-18"
     status: todo
@@ -134,9 +190,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "oeufs salés"
-    category: "Oeufs et salé"
-    volume: 110
+  - kw: "petit déjeuner turc"
+    category: "Organiser un brunch"
+    volume: 1600
     kd: null
     scheduled_date: "2026-09-22"
     status: todo
@@ -144,9 +200,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "muesli maison healthy"
+  - kw: "bienfaits des graines de chia"
     category: "Petit déjeuner sain"
-    volume: 390
+    volume: 1900
     kd: null
     scheduled_date: "2026-09-25"
     status: todo
@@ -154,9 +210,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette pancake soufflé"
+  - kw: "recette brioche à l'ancienne"
     category: "Pancakes et sucré"
-    volume: 260
+    volume: 2700
     kd: null
     scheduled_date: "2026-09-29"
     status: todo
@@ -164,9 +220,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "plateau brunch salé"
-    category: "Organiser un brunch"
-    volume: 140
+  - kw: "smoothie au concombre"
+    category: "Boissons du matin"
+    volume: 1000
     kd: null
     scheduled_date: "2026-10-02"
     status: todo
@@ -174,9 +230,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "smoothie aux framboises"
-    category: "Boissons du matin"
-    volume: 2182
+  - kw: "bagel saumon avocat"
+    category: "Oeufs et salé"
+    volume: 1727
     kd: null
     scheduled_date: "2026-10-06"
     status: todo
@@ -184,9 +240,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "tartine beurre-confiture"
-    category: "Oeufs et salé"
-    volume: 291
+  - kw: "petit déjeuner japonais"
+    category: "Organiser un brunch"
+    volume: 1900
     kd: null
     scheduled_date: "2026-10-09"
     status: todo
@@ -194,9 +250,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "bagel healthy"
+  - kw: "petit déjeuner sportif"
     category: "Petit déjeuner sain"
-    volume: 260
+    volume: 1900
     kd: null
     scheduled_date: "2026-10-13"
     status: todo
@@ -204,9 +260,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pancake ig bas"
+  - kw: "recette brioche tressée"
     category: "Pancakes et sucré"
-    volume: 720
+    volume: 3000
     kd: null
     scheduled_date: "2026-10-16"
     status: todo
@@ -214,9 +270,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "brunch dimanche"
-    category: "Organiser un brunch"
-    volume: 1900
+  - kw: "cocktail mimosa champagne jus d'orange"
+    category: "Boissons du matin"
+    volume: 600
     kd: null
     scheduled_date: "2026-10-20"
     status: todo
@@ -224,9 +280,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "cappuccino maison"
-    category: "Boissons du matin"
-    volume: null
+  - kw: "origine du bagel"
+    category: "Oeufs et salé"
+    volume: 880
     kd: null
     scheduled_date: "2026-10-23"
     status: todo
@@ -234,9 +290,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "oeufs cocotte poireaux"
-    category: "Oeufs et salé"
-    volume: 554
+  - kw: "petit déjeuner espagnol"
+    category: "Organiser un brunch"
+    volume: 1300
     kd: null
     scheduled_date: "2026-10-27"
     status: todo
@@ -244,9 +300,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette porridge healthy"
+  - kw: "calories d'un café au lait"
     category: "Petit déjeuner sain"
-    volume: 800
+    volume: 1300
     kd: null
     scheduled_date: "2026-10-30"
     status: todo
@@ -254,9 +310,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pancakes sans sucre"
+  - kw: "pain perdu recette ancienne"
     category: "Pancakes et sucré"
-    volume: 1182
+    volume: 2000
     kd: null
     scheduled_date: "2026-11-03"
     status: todo
@@ -264,9 +320,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "petit déj salé"
-    category: "Organiser un brunch"
-    volume: 762
+  - kw: "smoothie sans lait"
+    category: "Boissons du matin"
+    volume: 400
     kd: null
     scheduled_date: "2026-11-06"
     status: todo
@@ -274,9 +330,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "café filtre dosage"
-    category: "Boissons du matin"
-    volume: null
+  - kw: "tartine salée recette"
+    category: "Oeufs et salé"
+    volume: 880
     kd: null
     scheduled_date: "2026-11-10"
     status: todo
@@ -284,8 +340,8 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "omelette poivron"
-    category: "Oeufs et salé"
+  - kw: "petit déjeuner au lit"
+    category: "Organiser un brunch"
     volume: 1300
     kd: null
     scheduled_date: "2026-11-13"
@@ -294,9 +350,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "porridge overnight"
+  - kw: "porridge aux graines de chia"
     category: "Petit déjeuner sain"
-    volume: 3273
+    volume: 390
     kd: null
     scheduled_date: "2026-11-17"
     status: todo
@@ -304,9 +360,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette pancakes fromage blanc"
+  - kw: "levain pour brioche"
     category: "Pancakes et sucré"
-    volume: 800
+    volume: 1900
     kd: null
     scheduled_date: "2026-11-20"
     status: todo
@@ -314,9 +370,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "idee petit dej rapide"
-    category: "Organiser un brunch"
-    volume: 590
+  - kw: "jus d'orange le matin"
+    category: "Boissons du matin"
+    volume: 390
     kd: null
     scheduled_date: "2026-11-24"
     status: todo
@@ -324,9 +380,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "smoothie vert detox"
-    category: "Boissons du matin"
-    volume: 70
+  - kw: "gaufres jambon fromage"
+    category: "Oeufs et salé"
+    volume: 800
     kd: null
     scheduled_date: "2026-11-27"
     status: todo
@@ -334,9 +390,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "oeuf cocotte chorizo"
-    category: "Oeufs et salé"
-    volume: 1462
+  - kw: "petit déjeuner italien"
+    category: "Organiser un brunch"
+    volume: 720
     kd: null
     scheduled_date: "2026-12-01"
     status: todo
@@ -344,9 +400,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "overnight oats recette"
+  - kw: "pain perdu healthy"
     category: "Petit déjeuner sain"
-    volume: 4200
+    volume: 480
     kd: null
     scheduled_date: "2026-12-04"
     status: todo
@@ -354,9 +410,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pancakes sans œufs"
+  - kw: "brioche à la praline rose"
     category: "Pancakes et sucré"
-    volume: 756
+    volume: 2100
     kd: null
     scheduled_date: "2026-12-08"
     status: todo
@@ -364,9 +420,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "brunch idées"
-    category: "Organiser un brunch"
-    volume: 1812
+  - kw: "smoothie pomme banane kiwi"
+    category: "Boissons du matin"
+    volume: 655
     kd: null
     scheduled_date: "2026-12-11"
     status: todo
@@ -374,9 +430,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "jus d'orange pressé maison"
-    category: "Boissons du matin"
-    volume: null
+  - kw: "recettes pancakes sans oeufs"
+    category: "Oeufs et salé"
+    volume: 3000
     kd: null
     scheduled_date: "2026-12-15"
     status: todo
@@ -384,9 +440,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "mayonnaise oeuf dur"
-    category: "Oeufs et salé"
-    volume: 2300
+  - kw: "petit déjeuner riche en fer"
+    category: "Organiser un brunch"
+    volume: 1300
     kd: null
     scheduled_date: "2026-12-18"
     status: todo
@@ -394,9 +450,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pudding graine de chia"
+  - kw: "recettes smoothie protéiné"
     category: "Petit déjeuner sain"
-    volume: 2182
+    volume: 733
     kd: null
     scheduled_date: "2026-12-22"
     status: todo
@@ -404,9 +460,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "d'où vient le croissant"
+  - kw: "recette pâte à pancakes"
     category: "Pancakes et sucré"
-    volume: 390
+    volume: 1392
     kd: null
     scheduled_date: "2026-12-25"
     status: todo
@@ -414,9 +470,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "brunch maison"
-    category: "Organiser un brunch"
-    volume: 4909
+  - kw: "conservation du café moulu"
+    category: "Boissons du matin"
+    volume: 200
     kd: null
     scheduled_date: "2026-12-29"
     status: todo
@@ -424,9 +480,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "chocolat chaud maison"
-    category: "Boissons du matin"
-    volume: null
+  - kw: "oeufs au petit déjeuner"
+    category: "Oeufs et salé"
+    volume: 390
     kd: null
     scheduled_date: "2027-01-01"
     status: todo
@@ -434,9 +490,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recettes avec blanc d'oeufs"
-    category: "Oeufs et salé"
-    volume: 5077
+  - kw: "petit déjeuner prise de masse"
+    category: "Organiser un brunch"
+    volume: 1182
     kd: null
     scheduled_date: "2027-01-05"
     status: todo
@@ -444,9 +500,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pudding chia"
+  - kw: "porridge recette rapide"
     category: "Petit déjeuner sain"
-    volume: 4500
+    volume: 500
     kd: null
     scheduled_date: "2027-01-08"
     status: todo
@@ -454,9 +510,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "croissant et pain au chocolat"
+  - kw: "tartine chèvre miel"
     category: "Pancakes et sucré"
-    volume: 390
+    volume: 1727
     kd: null
     scheduled_date: "2027-01-12"
     status: todo
@@ -464,9 +520,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "brunch recette"
-    category: "Organiser un brunch"
-    volume: 7364
+  - kw: "calories d'un jus d'orange pressé"
+    category: "Boissons du matin"
+    volume: 325
     kd: null
     scheduled_date: "2027-01-15"
     status: todo
@@ -474,9 +530,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "café glacé maison"
-    category: "Boissons du matin"
-    volume: null
+  - kw: "pain perdu avec du pain dur"
+    category: "Oeufs et salé"
+    volume: 320
     kd: null
     scheduled_date: "2027-01-19"
     status: todo
@@ -484,9 +540,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "pancake banane oeuf"
-    category: "Oeufs et salé"
-    volume: 436
+  - kw: "formule petit déjeuner"
+    category: "Organiser un brunch"
+    volume: 720
     kd: null
     scheduled_date: "2027-01-22"
     status: todo
@@ -494,9 +550,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "graine de chia recette"
+  - kw: "petit déjeuner au fromage blanc"
     category: "Petit déjeuner sain"
-    volume: 2900
+    volume: 390
     kd: null
     scheduled_date: "2027-01-26"
     status: todo
@@ -504,9 +560,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "viennoiserie au chocolat"
+  - kw: "farine pour brioche"
     category: "Pancakes et sucré"
-    volume: 210
+    volume: 1455
     kd: null
     scheduled_date: "2027-01-29"
     status: todo
@@ -514,9 +570,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "idees de petit dejeuner"
-    category: "Organiser un brunch"
-    volume: 1143
+  - kw: "bienfaits du jus d'orange"
+    category: "Boissons du matin"
+    volume: 191
     kd: null
     scheduled_date: "2027-02-02"
     status: todo
@@ -524,9 +580,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette granola maison healthy"
-    category: "Petit déjeuner sain"
-    volume: 1400
+  - kw: "gaufres au saumon fumé"
+    category: "Oeufs et salé"
+    volume: 191
     kd: null
     scheduled_date: "2027-02-05"
     status: todo
@@ -534,9 +590,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette bagel"
-    category: "Pancakes et sucré"
-    volume: 3500
+  - kw: "petit déjeuner suédois"
+    category: "Organiser un brunch"
+    volume: 390
     kd: null
     scheduled_date: "2027-02-09"
     status: todo
@@ -544,9 +600,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "petit dejeuner sain"
+  - kw: "muesli recette maison"
     category: "Petit déjeuner sain"
-    volume: 9867
+    volume: 1455
     kd: null
     scheduled_date: "2027-02-12"
     status: todo
@@ -554,9 +610,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "bagel pain"
+  - kw: "moule à brioche"
     category: "Pancakes et sucré"
-    volume: 4000
+    volume: 1357
     kd: null
     scheduled_date: "2027-02-16"
     status: todo
@@ -564,9 +620,9 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "petit dej healthy"
-    category: "Petit déjeuner sain"
-    volume: 7364
+  - kw: "le café est-il mauvais pour la santé"
+    category: "Boissons du matin"
+    volume: 500
     kd: null
     scheduled_date: "2027-02-19"
     status: todo
@@ -574,11 +630,91 @@ articles:
     published_url_fr: null
     published_url_en: null
     error: null
-  - kw: "recette croissant au beurre"
-    category: "Pancakes et sucré"
-    volume: 1455
+  - kw: "pancakes avec 1 oeuf"
+    category: "Oeufs et salé"
+    volume: 191
     kd: null
     scheduled_date: "2027-02-23"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit déjeuner original"
+    category: "Organiser un brunch"
+    volume: 320
+    kd: null
+    scheduled_date: "2027-02-26"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "recette petit déjeuner protéiné"
+    category: "Petit déjeuner sain"
+    volume: 800
+    kd: null
+    scheduled_date: "2027-03-02"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "gaufres du nord"
+    category: "Pancakes et sucré"
+    volume: 1900
+    kd: null
+    scheduled_date: "2027-03-05"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "boire du jus d'orange tous les jours"
+    category: "Boissons du matin"
+    volume: 170
+    kd: null
+    scheduled_date: "2027-03-09"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "pain perdu salé jambon fromage"
+    category: "Oeufs et salé"
+    volume: 191
+    kd: null
+    scheduled_date: "2027-03-12"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit déjeuner de Noël"
+    category: "Organiser un brunch"
+    volume: 390
+    kd: null
+    scheduled_date: "2027-03-16"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "petit déjeuner équilibré pour maigrir"
+    category: "Petit déjeuner sain"
+    volume: 1000
+    kd: null
+    scheduled_date: "2027-03-19"
+    status: todo
+    published_date: null
+    published_url_fr: null
+    published_url_en: null
+    error: null
+  - kw: "gaufres sans beurre"
+    category: "Pancakes et sucré"
+    volume: 1727
+    kd: null
+    scheduled_date: "2027-03-23"
     status: todo
     published_date: null
     published_url_fr: null
