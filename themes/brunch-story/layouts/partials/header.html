@@ -21,11 +21,15 @@
                 </a>
                 <div class="mega" data-mega>
                     <div class="mega-inner">
+                        {{/* Toujours $hub.Permalink, jamais $.Permalink : dans ce
+                             range, $ designe la page en cours de rendu, si bien que
+                             les colonnes pointaient vers la page courante suivie
+                             d'une ancre inexistante. Le clic ne faisait rien. */}}
                         <div class="mega-cols">
                             {{ range .Params.groups }}
                             {{ $cat := .category }}
                             {{ $in := where $recipes "Params.categories" "intersect" (slice $cat) }}
-                            <a class="mega-col" href="{{ $.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}">
+                            <a class="mega-col" href="{{ $hub.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}">
                                 <span class="mega-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>
                                 <span class="mega-col-title">{{ .title }}</span>
                                 <span class="mega-col-lede">{{ .lede | truncate 72 }}</span>
@@ -109,7 +113,7 @@
             </div>
             <div class="acc-body">
                 {{ range .Params.groups }}
-                <a href="{{ $.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="acc-link">
+                <a href="{{ $hub.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="acc-link">
                     <span class="mega-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>{{ .title }}
                 </a>
                 {{ end }}
