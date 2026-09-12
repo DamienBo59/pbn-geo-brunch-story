@@ -1,0 +1,7 @@
+{{- /* Typographie francaise : espace fine insecable avant la ponctuation double,
+     pour qu'un titre ne casse jamais juste avant « : », « ; », « ! » ou « ? ».
+     Sans effet sur l'anglais, qui n'a pas d'espace avant ces signes. */ -}}
+{{- $t := . -}}
+{{- $t = replaceRE `\s+([:;!?»])` " $1" $t -}}
+{{- $t = replaceRE `(«)\s+` "$1 " $t -}}
+{{- $t | safeHTML -}}

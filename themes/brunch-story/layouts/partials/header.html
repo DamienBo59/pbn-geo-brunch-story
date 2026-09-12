@@ -1,65 +1,141 @@
-<header class="site-header">
+{{- $lang := .Site.Language.Lang -}}
+{{- $en := eq $lang "en" -}}
+{{- $hub := .Site.GetPage (printf "/%s/recettes" (cond $en "en" "fr")) -}}
+{{- if not $hub }}{{ $hub = .Site.GetPage "/recettes" }}{{ end -}}
+{{- $recipes := where .Site.RegularPages "Section" "recettes" -}}
+
+<header class="site-header" data-header>
     <div class="header-container">
-        <a href="{{ "/" | relURL }}" class="site-logo" aria-label="{{ .Site.Title }}">
-            {{ .Site.Title }}
+        <a href="{{ "/" | relLangURL }}" class="site-logo" aria-label="{{ .Site.Title }}">
+            <span class="logo-mark" aria-hidden="true">{{ partial "icon.html" "cup" }}</span>
+            <span class="logo-text">{{ .Site.Title }}</span>
         </a>
 
         <nav class="site-nav" role="navigation" aria-label="{{ i18n "main_nav" }}">
-            {{ range .Site.Menus.main }}
-            <a href="{{ .URL | relURL }}" class="nav-link{{ if $.IsMenuCurrent "main" . }} active{{ end }}">
-                {{ .Name }}
-            </a>
+
+            {{/* --- Recettes : panneau mega construit depuis les groupes du hub --- */}}
+            {{ with $hub }}
+            <div class="nav-item has-mega">
+                <a href="{{ .Permalink }}" class="nav-link nav-trigger" aria-haspopup="true" aria-expanded="false">
+                    {{ if $en }}Recipes{{ else }}Recettes{{ end }}{{ partial "icon.html" "chevron" }}
+                </a>
+                <div class="mega" data-mega>
+                    <div class="mega-inner">
+                        <div class="mega-cols">
+                            {{ range .Params.groups }}
+                            {{ $cat := .category }}
+                            {{ $in := where $recipes "Params.categories" "intersect" (slice $cat) }}
+                            <a class="mega-col" href="{{ $.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}">
+                                <span class="mega-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>
+                                <span class="mega-col-title">{{ .title }}</span>
+                                <span class="mega-col-lede">{{ .lede | truncate 72 }}</span>
+                                <span class="mega-col-count">{{ len $in }} {{ if $en }}recipe{{ if ne (len $in) 1 }}s{{ end }}{{ else }}recette{{ if ne (len $in) 1 }}s{{ end }}{{ end }}</span>
+                            </a>
+                            {{ end }}
+                        </div>
+                        <div class="mega-foot">
+                            <a href="{{ .Permalink }}" class="mega-all">
+                                {{ if $en }}All recipes{{ else }}Toutes les recettes{{ end }}{{ partial "icon.html" "arrow" }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ end }}
+
+            {{/* --- Le blog : panneau mega construit depuis les categories --- */}}
+            <div class="nav-item has-mega">
+                <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="nav-link nav-trigger" aria-haspopup="true" aria-expanded="false">
+                    {{ if $en }}Blog{{ else }}Le blog{{ end }}{{ partial "icon.html" "chevron" }}
+                </a>
+                <div class="mega" data-mega>
+                    <div class="mega-inner">
+                        <div class="mega-cols mega-cols-list">
+                            {{ range $name, $terms := .Site.Taxonomies.categories }}
+                            {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
+                            <a class="mega-row" href="{{ with $term }}{{ .Permalink }}{{ end }}">
+                                <span class="mega-row-title">{{ with $term }}{{ .Title }}{{ else }}{{ $name }}{{ end }}</span>
+                                <span class="mega-row-count">{{ len $terms }}</span>
+                            </a>
+                            {{ end }}
+                        </div>
+                        <div class="mega-foot">
+                            <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="mega-all">
+                                {{ if $en }}All articles{{ else }}Tous les articles{{ end }}{{ partial "icon.html" "arrow" }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{/* --- Lien direct --- */}}
+            {{ $organiser := .Site.GetPage (cond $en "/categories/hosting-a-brunch" "/categories/organiser-un-brunch") }}
+            {{ with $organiser }}
+            <a href="{{ .Permalink }}" class="nav-link">{{ .Title }}</a>
             {{ end }}
         </nav>
 
-        <!-- Language switcher -->
-        {{ if gt (len hugo.Sites) 1 }}
-        <div class="lang-switcher" aria-label="Language switcher">
-            {{ $defaultLang := .Site.Language.Locale | default "fr" }}
-            {{ $currentLang := .Site.Language.Lang }}
-            {{ range hugo.Sites }}
-            {{ $lang := . }}
-            {{ if eq $lang.Language.Lang $currentLang }}
-            <span class="lang-current" aria-current="true">{{ upper $lang.Language.Lang }}</span>
-            {{ else }}
-            {{ $target := "" }}
-            {{ range $.Translations }}
-                {{ if eq .Language.Lang $lang.Language.Lang }}{{ $target = .Permalink }}{{ end }}
+        <div class="header-right">
+            {{ if gt (len hugo.Sites) 1 }}
+            <div class="lang-switcher" aria-label="Language switcher">
+                {{ $currentLang := .Site.Language.Lang }}
+                {{ range hugo.Sites }}
+                {{ $l := . }}
+                {{ if eq $l.Language.Lang $currentLang }}
+                <span class="lang-current" aria-current="true">{{ upper $l.Language.Lang }}</span>
+                {{ else }}
+                {{ $target := "" }}
+                {{ range $.Translations }}{{ if eq .Language.Lang $l.Language.Lang }}{{ $target = .Permalink }}{{ end }}{{ end }}
+                {{ if not $target }}{{ $target = printf "/%s/" $l.Language.Lang }}{{ end }}
+                <a href="{{ $target }}" class="lang-link" hreflang="{{ $l.Language.Lang }}">{{ upper $l.Language.Lang }}</a>
+                {{ end }}
+                {{ end }}
+            </div>
             {{ end }}
-            {{ if not $target }}
-                {{ $target = printf "/%s/" $lang.Language.Lang }}
-            {{ end }}
-            <a href="{{ $target }}" class="lang-link" hreflang="{{ $lang.Language.Lang }}">{{ upper $lang.Language.Lang }}</a>
-            {{ end }}
-            {{ end }}
-        </div>
-        {{ end }}
 
-        <button class="menu-toggle" aria-label="Menu" aria-expanded="false">
-            <span class="hamburger"></span>
-        </button>
+            <button class="menu-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-mobile">
+                <span class="hamburger"></span>
+            </button>
+        </div>
     </div>
 
-    <nav class="nav-mobile" aria-label="{{ i18n "mobile_nav" }}">
-        {{ range .Site.Menus.main }}
-        <a href="{{ .URL | relURL }}" class="nav-link-mobile">{{ .Name }}</a>
+    {{/* --- Navigation mobile en accordeon --- */}}
+    <nav class="nav-mobile" id="nav-mobile" aria-label="{{ i18n "mobile_nav" }}">
+        {{ with $hub }}
+        <div class="acc">
+            <button class="acc-head" aria-expanded="false">{{ if $en }}Recipes{{ else }}Recettes{{ end }}{{ partial "icon.html" "chevron" }}</button>
+            <div class="acc-body">
+                {{ range .Params.groups }}
+                <a href="{{ $.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="acc-link">
+                    <span class="mega-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>{{ .title }}
+                </a>
+                {{ end }}
+                <a href="{{ .Permalink }}" class="acc-link acc-link-all">{{ if $en }}All recipes{{ else }}Toutes les recettes{{ end }}</a>
+            </div>
+        </div>
         {{ end }}
+        <div class="acc">
+            <button class="acc-head" aria-expanded="false">{{ if $en }}Blog{{ else }}Le blog{{ end }}{{ partial "icon.html" "chevron" }}</button>
+            <div class="acc-body">
+                {{ range $name, $terms := .Site.Taxonomies.categories }}
+                {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
+                <a class="acc-link" href="{{ with $term }}{{ .Permalink }}{{ end }}">{{ with $term }}{{ .Title }}{{ else }}{{ $name }}{{ end }} <span class="mega-row-count">{{ len $terms }}</span></a>
+                {{ end }}
+                <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="acc-link acc-link-all">{{ if $en }}All articles{{ else }}Tous les articles{{ end }}</a>
+            </div>
+        </div>
         {{ if gt (len hugo.Sites) 1 }}
         <div class="lang-switcher-mobile">
-            {{ $currentLangM := .Site.Language.Lang }}
+            {{ $cur := .Site.Language.Lang }}
             {{ range hugo.Sites }}
-            {{ $lang := . }}
-            {{ if eq $lang.Language.Lang $currentLangM }}
-            <span class="lang-current" aria-current="true">{{ upper $lang.Language.Lang }}</span>
+            {{ $l := . }}
+            {{ if eq $l.Language.Lang $cur }}
+            <span class="lang-current" aria-current="true">{{ upper $l.Language.Lang }}</span>
             {{ else }}
             {{ $target := "" }}
-            {{ range $.Translations }}
-                {{ if eq .Language.Lang $lang.Language.Lang }}{{ $target = .Permalink }}{{ end }}
-            {{ end }}
-            {{ if not $target }}
-                {{ $target = printf "/%s/" $lang.Language.Lang }}
-            {{ end }}
-            <a href="{{ $target }}" class="lang-link" hreflang="{{ $lang.Language.Lang }}">{{ upper $lang.Language.Lang }}</a>
+            {{ range $.Translations }}{{ if eq .Language.Lang $l.Language.Lang }}{{ $target = .Permalink }}{{ end }}{{ end }}
+            {{ if not $target }}{{ $target = printf "/%s/" $l.Language.Lang }}{{ end }}
+            <a href="{{ $target }}" class="lang-link" hreflang="{{ $l.Language.Lang }}">{{ upper $l.Language.Lang }}</a>
             {{ end }}
             {{ end }}
         </div>
@@ -68,14 +144,61 @@
 </header>
 
 <script>
-(function() {
-    var toggle = document.querySelector('.menu-toggle');
-    var mobileNav = document.querySelector('.nav-mobile');
-    if (toggle && mobileNav) {
-        toggle.addEventListener('click', function() {
-            var isOpen = mobileNav.classList.toggle('open');
-            toggle.setAttribute('aria-expanded', String(isOpen));
-        });
-    }
+(function () {
+  var header = document.querySelector('[data-header]');
+
+  /* Ombre du header au defilement */
+  var onScroll = function () {
+    if (window.scrollY > 8) header.classList.add('is-stuck');
+    else header.classList.remove('is-stuck');
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  /* Mega menu : ouverture au survol geree en CSS, au clic et au clavier ici */
+  document.querySelectorAll('.nav-item.has-mega').forEach(function (item) {
+    var trigger = item.querySelector('.nav-trigger');
+    trigger.addEventListener('click', function (e) {
+      /* sur ecran tactile, le premier tap ouvre au lieu de naviguer */
+      if (window.matchMedia('(hover: none)').matches && !item.classList.contains('open')) {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item.open').forEach(function (o) { if (o !== item) o.classList.remove('open'); });
+        item.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('.nav-item.open').forEach(function (o) {
+      o.classList.remove('open');
+      o.querySelector('.nav-trigger').setAttribute('aria-expanded', 'false');
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.nav-item')) return;
+    document.querySelectorAll('.nav-item.open').forEach(function (o) {
+      o.classList.remove('open');
+      o.querySelector('.nav-trigger').setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* Menu mobile */
+  var toggle = document.querySelector('.menu-toggle');
+  var mobileNav = document.querySelector('.nav-mobile');
+  if (toggle && mobileNav) {
+    toggle.addEventListener('click', function () {
+      var isOpen = mobileNav.classList.toggle('open');
+      toggle.classList.toggle('is-open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
+      document.body.classList.toggle('nav-locked', isOpen);
+    });
+  }
+  document.querySelectorAll('.acc-head').forEach(function (head) {
+    head.addEventListener('click', function () {
+      var open = head.parentElement.classList.toggle('open');
+      head.setAttribute('aria-expanded', String(open));
+    });
+  });
 })();
 </script>

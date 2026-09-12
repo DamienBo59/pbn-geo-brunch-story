@@ -4,21 +4,28 @@
 {{ $en := eq $lang "en" }}
 {{ $author := index .Site.Data.authors (.Params.author | default "bastien-delorme") }}
 
-{{ with .Params.image }}<img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" class="recipe-hero" width="1600" height="460">{{ end }}
+{{ with .Params.image }}
+<div class="recipe-hero-wrap" data-parallax>
+  <img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" class="recipe-hero" width="1600" height="540" fetchpriority="high">
+</div>
+{{ end }}
 
 <article class="recipe" itemscope itemtype="https://schema.org/Recipe">
   <header class="recipe-head">
+   <div class="recipe-head-card">
     <nav class="breadcrumb" aria-label="{{ if $en }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
       <ol class="breadcrumb-list">
         <li class="breadcrumb-item"><a href="{{ "/" | relURL }}">{{ if $en }}Home{{ else }}Accueil{{ end }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ "recettes/" | relLangURL }}">{{ if $en }}Recipes{{ else }}Recettes{{ end }}</a></li>
-        <li class="breadcrumb-item" aria-current="page">{{ .Title }}</li>
+        <li class="breadcrumb-sep" aria-hidden="true">/</li>
+        <li class="breadcrumb-item"><a href="{{ (cond $en "/en/recipes/" "/recettes/") | relURL }}">{{ if $en }}Recipes{{ else }}Recettes{{ end }}</a></li>
+        <li class="breadcrumb-sep" aria-hidden="true">/</li>
+        <li class="breadcrumb-item" aria-current="page">{{ partial "fr-typo.html" .Title }}</li>
       </ol>
     </nav>
 
-    {{ with $r.badges }}<ul class="recipe-tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
+    {{ with $r.badges }}<ul class="recipe-badges">{{ range . }}<li class="tag">{{ . }}</li>{{ end }}</ul>{{ end }}
 
-    <h1>{{ .Params.h1 | default .Title }}</h1>
+    <h1>{{ partial "fr-typo.html" (.Params.h1 | default .Title) }}</h1>
     {{ with .Params.subtitle }}<p class="recipe-subtitle">{{ . }}</p>{{ end }}
 
     <p class="recipe-byline">
@@ -29,24 +36,26 @@
     </p>
 
     <dl class="recipe-stats">
-      {{ with $r.prepTime }}<div class="recipe-stat"><dt>{{ if $en }}Prep{{ else }}Préparation{{ end }}</dt><dd>{{ . }} min</dd></div>{{ end }}
-      {{ with $r.totalTime }}<div class="recipe-stat"><dt>{{ if $en }}Total{{ else }}Total{{ end }}</dt><dd>{{ . }} min</dd></div>{{ end }}
-      {{ with $r.calories }}<div class="recipe-stat"><dt>{{ if $en }}Calories{{ else }}Calories{{ end }}</dt><dd>{{ . }}</dd></div>{{ end }}
-      {{ with $r.difficulty }}<div class="recipe-stat"><dt>{{ if $en }}Difficulty{{ else }}Difficulté{{ end }}</dt><dd>{{ . }}</dd></div>{{ end }}
+      {{ with $r.prepTime }}<div class="recipe-stat">{{ partial "icon.html" "timer" }}<dt>{{ if $en }}Prep{{ else }}Préparation{{ end }}</dt><dd>{{ . }} min</dd></div>{{ end }}
+      {{ with $r.totalTime }}<div class="recipe-stat">{{ partial "icon.html" "clock" }}<dt>Total</dt><dd>{{ . }} min</dd></div>{{ end }}
+      {{ with $r.calories }}<div class="recipe-stat">{{ partial "icon.html" "flame" }}<dt>Calories</dt><dd>{{ . }}</dd></div>{{ end }}
+      {{ with $r.difficulty }}<div class="recipe-stat">{{ partial "icon.html" "gauge" }}<dt>{{ if $en }}Difficulty{{ else }}Difficulté{{ end }}</dt><dd>{{ . }}</dd></div>{{ end }}
     </dl>
 
-    {{ with $r.brief }}
-    <div class="recipe-brief">
-      <p>{{ if $en }}In short{{ else }}En bref{{ end }}</p>
-      <ol>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ol>
-    </div>
-    {{ end }}
+   </div>
   </header>
 
   <div class="recipe-body">
     <div class="recipe-main">
 
-      <h2 id="ingredients">{{ if $en }}Ingredients{{ else }}Ingrédients{{ end }}</h2>
+      {{ with $r.brief }}
+      <div class="recipe-brief">
+        <p class="recipe-brief-title">{{ partial "icon.html" "list" }}{{ if $en }}In short{{ else }}En bref{{ end }}</p>
+        <ol>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ol>
+      </div>
+      {{ end }}
+
+      <h2 id="ingredients">{{ partial "icon.html" "scale" }}{{ if $en }}Ingredients{{ else }}Ingrédients{{ end }}</h2>
       {{ with $r.yield }}
       {{ $unit := $r.yieldUnit | default (cond $en "servings" "personnes") }}
       {{ $unitOne := $r.yieldUnitOne | default (strings.TrimSuffix "s" $unit) }}
@@ -60,13 +69,14 @@
       <ul class="ingredients">
         {{ range $ing := $r.ingredients }}
         <li>
+          <span class="ing-ico">{{ with $ing.icon }}{{ partial "icon.html" . }}{{ else }}{{ partial "ingredient-icon.html" $ing.name }}{{ end }}</span>
           <span class="name">{{ $ing.name }}</span>
           {{ with $ing.qty }}<span class="qty" data-qty="{{ . }}"{{ with $ing.unit }} data-unit="{{ . }}" data-unit-plural="{{ $ing.unitPlural | default . }}"{{ end }}>{{ . }}{{ with $ing.unit }}&nbsp;{{ if gt $ing.qty 1 }}{{ $ing.unitPlural | default . }}{{ else }}{{ . }}{{ end }}{{ end }}</span>{{ end }}
         </li>
         {{ end }}
       </ul>
 
-      <h2 id="preparation">{{ if $en }}Instructions{{ else }}Préparation{{ end }}</h2>
+      <h2 id="preparation">{{ partial "icon.html" "utensils" }}{{ if $en }}Instructions{{ else }}Préparation{{ end }}</h2>
       <ol class="steps">
         {{ range $r.steps }}
         <li class="step">
@@ -81,28 +91,33 @@
 
       {{ with $r.fact }}
       <div class="recipe-fact">
-        <strong>{{ if $en }}Good to know{{ else }}Le saviez-vous{{ end }}</strong>
-        {{ . | markdownify }}
+        {{ partial "icon.html" "bulb" }}
+        <div>
+          <p class="recipe-fact-title">{{ if $en }}Good to know{{ else }}Le saviez-vous{{ end }}</p>
+          {{ . | markdownify }}
+        </div>
       </div>
       {{ end }}
 
       {{ .Content }}
 
       {{ with .Params.faq }}
-      <h2 id="faq">{{ if $en }}Frequently asked questions{{ else }}Questions fréquentes{{ end }}</h2>
+      <h2 id="faq">{{ partial "icon.html" "bulb" }}{{ if $en }}Frequently asked questions{{ else }}Questions fréquentes{{ end }}</h2>
+      <div class="recipe-faq">
       {{ range . }}
       <details>
         <summary>{{ .question }}</summary>
         <p>{{ .answer | markdownify }}</p>
       </details>
       {{ end }}
+      </div>
       {{ end }}
     </div>
 
     <aside class="recipe-aside">
       {{ with $r.nutrition }}
       <div class="recipe-box">
-        <h2>{{ if $en }}Nutrition{{ else }}Valeurs nutritionnelles{{ end }}</h2>
+        <h2>{{ partial "icon.html" "flame" }}{{ if $en }}Nutrition{{ else }}Valeurs nutritionnelles{{ end }}</h2>
         <ul class="nutrition">
           {{ with $r.calories }}<li><span>{{ if $en }}Calories{{ else }}Calories{{ end }}</span><span class="val">{{ . }} kcal</span></li>{{ end }}
           {{ with .protein }}<li><span>{{ if $en }}Protein{{ else }}Protéines{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
@@ -112,13 +127,13 @@
           {{ with .fiber }}<li><span>{{ if $en }}Fibre{{ else }}Fibres{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
           {{ with .salt }}<li><span>{{ if $en }}Salt{{ else }}Sel{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
         </ul>
-        <p style="font-size:var(--fs-xs);color:var(--text-light);margin:.6rem 0 0">{{ if $en }}Per serving, estimated{{ else }}Par portion, estimation{{ end }}</p>
+        <p class="recipe-note">{{ if $en }}Per serving, estimated{{ else }}Par portion, estimation{{ end }}</p>
       </div>
       {{ end }}
 
       {{ with $r.utensils }}
       <div class="recipe-box">
-        <h2>{{ if $en }}Equipment{{ else }}Ustensiles{{ end }}</h2>
+        <h2>{{ partial "icon.html" "utensils" }}{{ if $en }}Equipment{{ else }}Ustensiles{{ end }}</h2>
         <ul class="utensils">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
       </div>
       {{ end }}
@@ -126,8 +141,8 @@
       {{ $related := where (where .Site.RegularPages "Section" "recettes") "Permalink" "!=" .Permalink }}
       {{ with first 4 $related }}
       <div class="recipe-box">
-        <h2>{{ if $en }}Other recipes{{ else }}Autres recettes{{ end }}</h2>
-        <ul class="utensils">{{ range . }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+        <h2>{{ partial "icon.html" "bowl" }}{{ if $en }}Other recipes{{ else }}Autres recettes{{ end }}</h2>
+        <ul>{{ range . }}<li><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></li>{{ end }}</ul>
       </div>
       {{ end }}
     </aside>

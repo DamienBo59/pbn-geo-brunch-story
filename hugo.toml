@@ -48,66 +48,26 @@ enableEmoji = false
   url = "/"
   weight = 1
 [[languages.fr.menus.main]]
-  name = "Boissons du matin"
-  url = "/categories/boissons-du-matin/"
-  weight = 2
-[[languages.fr.menus.main]]
-  name = "Organiser un brunch"
-  url = "/categories/organiser-un-brunch/"
-  weight = 3
-[[languages.fr.menus.main]]
-  name = "Petit déjeuner sain"
-  url = "/categories/petit-dejeuner-sain/"
-  weight = 4
-[[languages.fr.menus.main]]
-  name = "Pancakes et sucré"
-  url = "/categories/pancakes-et-sucre/"
-  weight = 5
-[[languages.fr.menus.main]]
-  name = "Oeufs et salé"
-  url = "/categories/oeufs-et-sale/"
-  weight = 6
-[[languages.fr.menus.main]]
   name = "Recettes"
   url = "/recettes/"
-  weight = 10
+  weight = 2
 [[languages.fr.menus.main]]
-  name = "Le Blog"
+  name = "Le blog"
   url = "/blog/"
-  weight = 99
+  weight = 3
 
 [[languages.en.menus.main]]
   name = "Home"
   url = "/en/"
   weight = 1
 [[languages.en.menus.main]]
-  name = "Morning drinks"
-  url = "/en/categories/morning-drinks/"
-  weight = 2
-[[languages.en.menus.main]]
-  name = "Hosting a brunch"
-  url = "/en/categories/hosting-a-brunch/"
-  weight = 3
-[[languages.en.menus.main]]
-  name = "Healthy breakfast"
-  url = "/en/categories/healthy-breakfast/"
-  weight = 4
-[[languages.en.menus.main]]
-  name = "Pancakes and sweet"
-  url = "/en/categories/pancakes-and-sweet/"
-  weight = 5
-[[languages.en.menus.main]]
-  name = "Eggs and savoury"
-  url = "/en/categories/eggs-and-savoury/"
-  weight = 6
-[[languages.en.menus.main]]
   name = "Recipes"
   url = "/en/recipes/"
-  weight = 10
+  weight = 2
 [[languages.en.menus.main]]
-  name = "The Blog"
+  name = "Blog"
   url = "/en/blog/"
-  weight = 99
+  weight = 3
 
 [params]
   default_og_image = "/images/og-default.jpg"

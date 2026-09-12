@@ -1,0 +1,20 @@
+{{- /* Choisit une icone selon le nom de l'ingredient. Le front matter peut
+     toujours forcer via `icon:` sur la ligne d'ingredient. */ -}}
+{{- $n := lower . -}}
+{{- $ico := "bowl" -}}
+{{- if     findRE "(farine|flour|floc|avoine|oat|cereal|semoule|\\bblé\\b|muesli|granola)" $n }}{{ $ico = "wheat" }}
+{{- else if findRE "(oeuf|œuf|egg|jaune|blanc d)" $n }}{{ $ico = "egg" }}
+{{- else if findRE "(lait|milk|creme|crème|cream|yaourt|yog|fromage|gouda|mascarpone|ricotta)" $n }}{{ $ico = "milk" }}
+{{- else if findRE "(beurre|butter|margarine)" $n }}{{ $ico = "butter" }}
+{{- else if findRE "(miel|honey|sirop d.{0,2}rable|maple)" $n }}{{ $ico = "honey" }}
+{{- else if findRE "(sucre|sugar|cassonade|vergeoise|sirop)" $n }}{{ $ico = "sugar" }}
+{{- else if findRE "(amande|noisette|noix|nut|almond|hazelnut|pecan|graine|seed|courge|tournesol|sesame|chia|lin)" $n }}{{ $ico = "nut" }}
+{{- else if findRE "(huile|oil|coco)" $n }}{{ $ico = "oil" }}
+{{- else if findRE "(sel|salt|poivre|pepper)" $n }}{{ $ico = "salt" }}
+{{- else if findRE "(cannelle|cinnamon|vanille|vanilla|muscade|nutmeg|epice|épice|spice|cardamome)" $n }}{{ $ico = "spice" }}
+{{- else if findRE "(chocolat|chocolate|cacao|cocoa)" $n }}{{ $ico = "choco" }}
+{{- else if findRE "(pain|bread|brioche|toast|tartine)" $n }}{{ $ico = "bread" }}
+{{- else if findRE "(fruit|banane|banana|pomme|apple|poire|fraise|berry|myrtille|framboise|raisin|datte|abricot|citron|lemon|orange)" $n }}{{ $ico = "fruit" }}
+{{- else if findRE "(cafe|café|coffee|the |thé |tea|eau|water|jus|juice)" $n }}{{ $ico = "cup" }}
+{{- end -}}
+{{- partial "icon.html" $ico -}}

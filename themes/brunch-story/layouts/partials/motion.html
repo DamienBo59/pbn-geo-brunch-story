@@ -1,0 +1,58 @@
+<script>
+(function () {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* --- Apparition au defilement --- */
+  var targets = document.querySelectorAll('[data-reveal]');
+  if (targets.length) {
+    if (reduced || !('IntersectionObserver' in window)) {
+      targets.forEach(function (el) { el.classList.add('is-in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      targets.forEach(function (el, i) {
+        el.style.transitionDelay = Math.min(i % 6, 5) * 60 + 'ms';
+        io.observe(el);
+      });
+    }
+  }
+
+  /* --- Parallax : translation pilotee par le scroll, jamais background-attachment
+         (ignore sur iOS). Facteur faible, on cherche la profondeur, pas l'effet. --- */
+  var layers = [].slice.call(document.querySelectorAll('[data-parallax]'));
+  if (!layers.length || reduced) return;
+
+  var items = layers.map(function (wrap) {
+    return { wrap: wrap, el: wrap.firstElementChild || wrap, speed: parseFloat(wrap.dataset.parallax) || 0.18 };
+  }).filter(function (i) { return i.el; });
+
+  items.forEach(function (i) { i.el.style.willChange = 'transform'; });
+
+  var ticking = false;
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight;
+    items.forEach(function (i) {
+      var r = i.wrap.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      /* progression de -1 (sous l'ecran) a 1 (au-dessus) */
+      var p = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
+      var shift = -p * r.height * i.speed;
+      i.el.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0) scale(1.18)';
+    });
+  }
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(update);
+  }
+  update();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+})();
+</script>

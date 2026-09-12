@@ -8,14 +8,15 @@
     <nav class="breadcrumb" aria-label="{{ if $en }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
       <ol class="breadcrumb-list">
         <li class="breadcrumb-item"><a href="{{ "/" | relURL }}">{{ if $en }}Home{{ else }}Accueil{{ end }}</a></li>
+        <li class="breadcrumb-sep" aria-hidden="true">/</li>
         <li class="breadcrumb-item" aria-current="page">{{ .Title }}</li>
       </ol>
     </nav>
-    <h1>{{ .Params.h1 | default .Title }}</h1>
+    <h1>{{ partial "fr-typo.html" (.Params.h1 | default .Title) }}</h1>
     {{ with .Description }}<p class="lede">{{ . }}</p>{{ end }}
     {{ with .Params.groups }}
     <ul class="recipe-toc">
-      {{ range . }}<li><a href="#{{ .anchor }}">{{ .title }}</a></li>{{ end }}
+      {{ range . }}<li><a href="#{{ .anchor }}">{{ partial "icon.html" (.icon | default "bowl") }}{{ .title }}</a></li>{{ end }}
     </ul>
     {{ end }}
   </div>
@@ -29,8 +30,13 @@
   {{ $items := where $all "Params.categories" "intersect" (slice $g.category) }}
   {{ if $items }}
   <section class="recipe-section">
-    <h2 id="{{ $g.anchor }}">{{ $g.title }}</h2>
-    {{ with $g.lede }}<p class="section-lede">{{ . | markdownify }}</p>{{ end }}
+    <div class="recipe-section-head">
+      <span class="mega-ico">{{ partial "icon.html" ($g.icon | default "bowl") }}</span>
+      <div>
+        <h2 id="{{ $g.anchor }}">{{ $g.title }}</h2>
+        {{ with $g.lede }}<p class="section-lede">{{ . | markdownify }}</p>{{ end }}
+      </div>
+    </div>
     <div class="recipe-grid">
       {{ range $items.ByDate.Reverse }}
       {{ $r := .Params.recipe }}
@@ -43,13 +49,13 @@
           {{ end }}
         </a>
         <div class="recipe-card-body">
-          {{ with $r.badges }}<ul class="recipe-tags">{{ range first 2 . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          {{ with $r.badges }}<ul class="recipe-badges">{{ range first 2 . }}<li class="tag">{{ . }}</li>{{ end }}</ul>{{ end }}
+          <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
           <p class="recipe-card-desc">{{ .Description }}</p>
-          <p class="recipe-card-meta">
-            {{ with $r.totalTime }}<span><strong>{{ . }} min</strong></span>{{ end }}
-            {{ with $r.difficulty }}<span>{{ . }}</span>{{ end }}
-            {{ with $r.calories }}<span>{{ . }} kcal</span>{{ end }}
+          <p class="article-meta">
+            {{ with $r.totalTime }}{{ partial "icon.html" "clock" }} {{ . }} min{{ end }}
+            {{ with $r.calories }}<span class="meta-separator">·</span>{{ partial "icon.html" "flame" }} {{ . }} kcal{{ end }}
+            {{ with $r.difficulty }}<span class="meta-separator">·</span>{{ partial "icon.html" "gauge" }} {{ . }}{{ end }}
           </p>
         </div>
       </article>
@@ -75,7 +81,7 @@
           {{ else }}<span class="recipe-card-ph" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>{{ end }}
         </a>
         <div class="recipe-card-body">
-          <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+          <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
           <p class="recipe-card-desc">{{ .Description }}</p>
         </div>
       </article>
