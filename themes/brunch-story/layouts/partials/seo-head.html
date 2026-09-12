@@ -98,8 +98,10 @@
 }
 </script>
 
-<!-- JSON-LD Schema.org : BlogPosting (articles) -->
-{{ if .IsPage }}
+<!-- JSON-LD Schema.org : Article (articles de blog).
+     Les pages de la section recettes emettent un Recipe a la place, depuis
+     layouts/recettes/single.html : ne jamais avoir les deux sur une meme page. -->
+{{ if and .IsPage (ne .Section "recettes") }}
 {{ $lang := .Site.Language.Lang }}
 {{ $author := dict }}
 {{ with .Params.author }}

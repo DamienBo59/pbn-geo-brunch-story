@@ -1,0 +1,243 @@
+{{ define "main" }}
+{{ $lang := .Site.Language.Lang }}
+{{ $r := .Params.recipe }}
+{{ $en := eq $lang "en" }}
+{{ $author := index .Site.Data.authors (.Params.author | default "bastien-delorme") }}
+
+{{ with .Params.image }}<img src="{{ . | relURL }}" alt="{{ $.Params.imageAlt | default $.Title }}" class="recipe-hero" width="1600" height="460">{{ end }}
+
+<article class="recipe" itemscope itemtype="https://schema.org/Recipe">
+  <header class="recipe-head">
+    <nav class="breadcrumb" aria-label="{{ if $en }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
+      <ol class="breadcrumb-list">
+        <li class="breadcrumb-item"><a href="{{ "/" | relURL }}">{{ if $en }}Home{{ else }}Accueil{{ end }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ "recettes/" | relLangURL }}">{{ if $en }}Recipes{{ else }}Recettes{{ end }}</a></li>
+        <li class="breadcrumb-item" aria-current="page">{{ .Title }}</li>
+      </ol>
+    </nav>
+
+    {{ with $r.badges }}<ul class="recipe-tags">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>{{ end }}
+
+    <h1>{{ .Params.h1 | default .Title }}</h1>
+    {{ with .Params.subtitle }}<p class="recipe-subtitle">{{ . }}</p>{{ end }}
+
+    <p class="recipe-byline">
+      {{ if $en }}By{{ else }}Par{{ end }} <strong>{{ $author.name }}</strong>
+      <span aria-hidden="true">·</span>
+      <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ if $en }}Updated on{{ else }}Mis à jour le{{ end }} {{ time.Format "2 January 2006" .Lastmod }}</time>
+      {{ if .Params.readingTime }}<span aria-hidden="true">·</span> {{ .ReadingTime }} {{ if $en }}min read{{ else }}min de lecture{{ end }}{{ end }}
+    </p>
+
+    <dl class="recipe-stats">
+      {{ with $r.prepTime }}<div class="recipe-stat"><dt>{{ if $en }}Prep{{ else }}Préparation{{ end }}</dt><dd>{{ . }} min</dd></div>{{ end }}
+      {{ with $r.totalTime }}<div class="recipe-stat"><dt>{{ if $en }}Total{{ else }}Total{{ end }}</dt><dd>{{ . }} min</dd></div>{{ end }}
+      {{ with $r.calories }}<div class="recipe-stat"><dt>{{ if $en }}Calories{{ else }}Calories{{ end }}</dt><dd>{{ . }}</dd></div>{{ end }}
+      {{ with $r.difficulty }}<div class="recipe-stat"><dt>{{ if $en }}Difficulty{{ else }}Difficulté{{ end }}</dt><dd>{{ . }}</dd></div>{{ end }}
+    </dl>
+
+    {{ with $r.brief }}
+    <div class="recipe-brief">
+      <p>{{ if $en }}In short{{ else }}En bref{{ end }}</p>
+      <ol>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ol>
+    </div>
+    {{ end }}
+  </header>
+
+  <div class="recipe-body">
+    <div class="recipe-main">
+
+      <h2 id="ingredients">{{ if $en }}Ingredients{{ else }}Ingrédients{{ end }}</h2>
+      {{ with $r.yield }}
+      {{ $unit := $r.yieldUnit | default (cond $en "servings" "personnes") }}
+      {{ $unitOne := $r.yieldUnitOne | default (strings.TrimSuffix "s" $unit) }}
+      <div class="portions" data-base="{{ . }}" data-unit="{{ $unit }}" data-unit-one="{{ $unitOne }}">
+        <span>{{ if $en }}For{{ else }}Pour{{ end }}</span>
+        <button type="button" class="portions-less" aria-label="{{ if $en }}Fewer servings{{ else }}Moins de portions{{ end }}">−</button>
+        <output class="portions-value">{{ . }} {{ if eq . 1 }}{{ $unitOne }}{{ else }}{{ $unit }}{{ end }}</output>
+        <button type="button" class="portions-more" aria-label="{{ if $en }}More servings{{ else }}Plus de portions{{ end }}">+</button>
+      </div>
+      {{ end }}
+      <ul class="ingredients">
+        {{ range $ing := $r.ingredients }}
+        <li>
+          <span class="name">{{ $ing.name }}</span>
+          {{ with $ing.qty }}<span class="qty" data-qty="{{ . }}"{{ with $ing.unit }} data-unit="{{ . }}" data-unit-plural="{{ $ing.unitPlural | default . }}"{{ end }}>{{ . }}{{ with $ing.unit }}&nbsp;{{ if gt $ing.qty 1 }}{{ $ing.unitPlural | default . }}{{ else }}{{ . }}{{ end }}{{ end }}</span>{{ end }}
+        </li>
+        {{ end }}
+      </ul>
+
+      <h2 id="preparation">{{ if $en }}Instructions{{ else }}Préparation{{ end }}</h2>
+      <ol class="steps">
+        {{ range $r.steps }}
+        <li class="step">
+          {{ with .image }}<img src="{{ . | relURL }}" alt="{{ $.Title }}" class="step-img" loading="lazy" width="340" height="255">{{ end }}
+          <div class="step-text">
+            <h3>{{ .name }}</h3>
+            {{ .text | markdownify }}
+          </div>
+        </li>
+        {{ end }}
+      </ol>
+
+      {{ with $r.fact }}
+      <div class="recipe-fact">
+        <strong>{{ if $en }}Good to know{{ else }}Le saviez-vous{{ end }}</strong>
+        {{ . | markdownify }}
+      </div>
+      {{ end }}
+
+      {{ .Content }}
+
+      {{ with .Params.faq }}
+      <h2 id="faq">{{ if $en }}Frequently asked questions{{ else }}Questions fréquentes{{ end }}</h2>
+      {{ range . }}
+      <details>
+        <summary>{{ .question }}</summary>
+        <p>{{ .answer | markdownify }}</p>
+      </details>
+      {{ end }}
+      {{ end }}
+    </div>
+
+    <aside class="recipe-aside">
+      {{ with $r.nutrition }}
+      <div class="recipe-box">
+        <h2>{{ if $en }}Nutrition{{ else }}Valeurs nutritionnelles{{ end }}</h2>
+        <ul class="nutrition">
+          {{ with $r.calories }}<li><span>{{ if $en }}Calories{{ else }}Calories{{ end }}</span><span class="val">{{ . }} kcal</span></li>{{ end }}
+          {{ with .protein }}<li><span>{{ if $en }}Protein{{ else }}Protéines{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+          {{ with .fat }}<li><span>{{ if $en }}Fat{{ else }}Lipides{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+          {{ with .carbs }}<li><span>{{ if $en }}Carbs{{ else }}Glucides{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+          {{ with .sugar }}<li><span>{{ if $en }}of which sugars{{ else }}dont sucres{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+          {{ with .fiber }}<li><span>{{ if $en }}Fibre{{ else }}Fibres{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+          {{ with .salt }}<li><span>{{ if $en }}Salt{{ else }}Sel{{ end }}</span><span class="val">{{ . }} g</span></li>{{ end }}
+        </ul>
+        <p style="font-size:var(--fs-xs);color:var(--text-light);margin:.6rem 0 0">{{ if $en }}Per serving, estimated{{ else }}Par portion, estimation{{ end }}</p>
+      </div>
+      {{ end }}
+
+      {{ with $r.utensils }}
+      <div class="recipe-box">
+        <h2>{{ if $en }}Equipment{{ else }}Ustensiles{{ end }}</h2>
+        <ul class="utensils">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+      </div>
+      {{ end }}
+
+      {{ $related := where (where .Site.RegularPages "Section" "recettes") "Permalink" "!=" .Permalink }}
+      {{ with first 4 $related }}
+      <div class="recipe-box">
+        <h2>{{ if $en }}Other recipes{{ else }}Autres recettes{{ end }}</h2>
+        <ul class="utensils">{{ range . }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+      </div>
+      {{ end }}
+    </aside>
+  </div>
+</article>
+
+{{/* Schema.org Recipe : modele HelloFresh (champs complets) avec les HowToStep
+     nommes de Quitoque. Pas d'aggregateRating : aucun vote reel sur ce site. */}}
+{{ $img := "" }}{{ with .Params.image }}{{ $img = (absURL .) }}{{ end }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": {{ .Title }},
+  "description": {{ .Description }},
+  {{ with $img }}"image": [{{ . }}],{{ end }}
+  "author": { "@type": "Person", "name": {{ $author.name }} },
+  "datePublished": {{ .Date.Format "2006-01-02" }},
+  "dateModified": {{ .Lastmod.Format "2006-01-02" }},
+  "inLanguage": {{ .Site.Language.Lang }},
+  {{ with $r.prepTime }}"prepTime": "PT{{ . }}M",{{ end }}
+  {{ with $r.cookTime }}"cookTime": "PT{{ . }}M",{{ end }}
+  {{ with $r.totalTime }}"totalTime": "PT{{ . }}M",{{ end }}
+  {{ with $r.yield }}"recipeYield": {{ printf "%v %s" . ($r.yieldUnit | default (cond $en "servings" "personnes")) }},{{ end }}
+  {{ with $r.category }}"recipeCategory": {{ . }},{{ end }}
+  {{ with $r.cuisine }}"recipeCuisine": {{ . }},{{ end }}
+  {{ with .Params.tags }}"keywords": {{ delimit . ", " }},{{ end }}
+  {{ with $r.nutrition }}
+  "nutrition": {
+    "@type": "NutritionInformation"
+    {{ with $r.calories }},"calories": "{{ . }} kcal"{{ end }}
+    {{ with .protein }},"proteinContent": "{{ . }} g"{{ end }}
+    {{ with .fat }},"fatContent": "{{ . }} g"{{ end }}
+    {{ with .carbs }},"carbohydrateContent": "{{ . }} g"{{ end }}
+    {{ with .sugar }},"sugarContent": "{{ . }} g"{{ end }}
+    {{ with .fiber }},"fiberContent": "{{ . }} g"{{ end }}
+    {{ with .salt }},"sodiumContent": "{{ . }} g"{{ end }}
+  },
+  {{ end }}
+  "recipeIngredient": [
+    {{- range $i, $e := $r.ingredients }}{{ if $i }},{{ end }}
+    {{- $parts := slice }}
+    {{- with $e.qty }}{{ $parts = $parts | append (printf "%v" .) }}{{ end }}
+    {{- with $e.unit }}{{ $parts = $parts | append . }}{{ end }}
+    {{- $parts = $parts | append $e.name }}
+    {{ delimit $parts " " }}
+    {{- end }}
+  ],
+  "recipeInstructions": [
+    {{ range $i, $s := $r.steps }}{{ if $i }},{{ end }}
+    { "@type": "HowToStep", "name": {{ $s.name }}, "text": {{ $s.text | plainify | strings.TrimSpace }}{{ with $s.image }}, "image": {{ absURL . }}{{ end }} }
+    {{ end }}
+  ]
+}
+</script>
+
+<!-- JSON-LD Schema.org : BreadcrumbList (recettes) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": {{ cond $en "Home" "Accueil" }}, "item": {{ .Site.BaseURL }} },
+    { "@type": "ListItem", "position": 2, "name": {{ cond $en "Recipes" "Recettes" }}, "item": {{ (cond $en "/en/recipes/" "/recettes/") | absURL }} },
+    { "@type": "ListItem", "position": 3, "name": {{ .Title }}, "item": {{ .Permalink }} }
+  ]
+}
+</script>
+
+<!-- JSON-LD Schema.org : FAQPage (depuis les FAQ de la recette) -->
+{{ with .Params.faq }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{ range $i, $item := . }}{{ if $i }},{{ end }}
+    { "@type": "Question", "name": {{ $item.question }}, "acceptedAnswer": { "@type": "Answer", "text": {{ $item.answer }} } }
+    {{ end }}
+  ]
+}
+</script>
+{{ end }}
+
+<script>
+(function(){
+  document.querySelectorAll('.portions').forEach(function(box){
+    var base = parseFloat(box.dataset.base) || 1, cur = base;
+    var out = box.querySelector('.portions-value');
+    var unit = box.dataset.unit || '';
+    var unitOne = box.dataset.unitOne || unit;
+    var list = box.parentElement.querySelector('.ingredients');
+    var less = box.querySelector('.portions-less'), more = box.querySelector('.portions-more');
+    function fmt(n){ return (Math.round(n * 100) / 100).toString().replace('.', ','); }
+    function render(){
+      out.textContent = cur + ' ' + (cur === 1 ? unitOne : unit);
+      list.querySelectorAll('.qty').forEach(function(q){
+        var b = parseFloat(q.dataset.qty);
+        if (isNaN(b)) return;
+        var n = b * cur / base;
+        var u = n > 1 ? (q.dataset.unitPlural || q.dataset.unit || '') : (q.dataset.unit || '');
+        q.textContent = fmt(n) + (u ? '\u00a0' + u : '');
+      });
+      less.disabled = cur <= 1;
+      more.disabled = cur >= base * 4;
+    }
+    less.addEventListener('click', function(){ if (cur > 1) { cur--; render(); } });
+    more.addEventListener('click', function(){ if (cur < base * 4) { cur++; render(); } });
+    render();
+  });
+})();
+</script>
+{{ end }}

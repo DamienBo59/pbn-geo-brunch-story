@@ -47,10 +47,29 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
 
     /* ARRONDIS */
-    --radius-sm: 0.25rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.75rem;
-    --radius-xl: 1rem;
+    --radius-sm: 2px;
+    --radius-md: 4px;
+    --radius-lg: 4px;
+    --radius-xl: 8px;
+
+    /* ECHELLE TYPO — calquee sur le parti pris editorial de HelloFresh,
+       titres affirmes, corps confortable. Tokenisee comme chez Quitoque. */
+    --fs-xs: 0.75rem;
+    --fs-s: 0.875rem;
+    --fs-m: 1rem;
+    --fs-l: 1.125rem;
+    --fs-xl: 1.5rem;
+    --fs-2xl: 2rem;
+    --fs-3xl: 2.5rem;
+    --fs-4xl: 3.125rem;
+
+    /* RECETTES */
+    --recipe-hero-h: 460px;
+    --recipe-max: 900px;
+    --recipe-aside: 280px;
+    --tag-bg: #F5EDE1;
+    --tag-text: #8A4319;
+    --step-img: 340px;
 
     /* TRANSITIONS */
     --transition-fast: 150ms ease;
@@ -1583,4 +1602,127 @@ img {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
+}
+
+/* ==========================================================================
+   SECTION RECETTES
+   Gabarits repris de HelloFresh (hero pleine largeur, bandeau de metriques,
+   etapes illustrees en paires image/texte, colonne laterale) et de Quitoque
+   (etapes nommees, badges, selecteur de portions). CSS ecrit pour ce site.
+   ========================================================================== */
+
+/* --- Hub /recettes/ --- */
+.recipe-hub-hero { background: var(--background-alt); padding: var(--space-xl) 0 var(--space-lg); }
+.recipe-hub-hero h1 { font-size: var(--fs-4xl); line-height: 1.1; margin: 0 0 var(--space-sm); }
+.recipe-hub-hero .lede { font-size: var(--fs-l); color: var(--text-light); max-width: 62ch; }
+
+/* sommaire ancre, repris du hub HelloFresh */
+.recipe-toc { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-md); padding: 0; list-style: none; }
+.recipe-toc a {
+    display: inline-block; padding: 0.45rem 0.9rem; border: 1px solid var(--border);
+    border-radius: 999px; background: var(--white); color: var(--text);
+    font-family: var(--font-ui); font-size: var(--fs-s); text-decoration: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+.recipe-toc a:hover, .recipe-toc a:focus { background: var(--primary); border-color: var(--primary); color: var(--white); }
+
+.recipe-section { padding: var(--space-lg) 0; border-bottom: 1px solid var(--border); }
+.recipe-section:last-of-type { border-bottom: 0; }
+.recipe-section > h2 { font-size: var(--fs-2xl); margin: 0 0 var(--space-xs); scroll-margin-top: 90px; }
+.recipe-section > .section-lede { color: var(--text-light); max-width: 68ch; margin: 0 0 var(--space-md); }
+
+.recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: var(--space-md); }
+
+/* --- Carte de recette --- */
+.recipe-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; }
+.recipe-card:hover { border-color: var(--primary-light); }
+.recipe-card-img { display: block; aspect-ratio: 4 / 3; width: 100%; object-fit: cover; background: var(--background-alt); }
+.recipe-card-ph { display: flex; align-items: center; justify-content: center; aspect-ratio: 4 / 3; background: var(--background-alt); color: var(--primary); font-family: var(--font-heading); font-size: var(--fs-2xl); }
+.recipe-card-body { padding: var(--space-sm); display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+.recipe-card-body h3 { font-size: var(--fs-l); line-height: 1.25; margin: 0; }
+.recipe-card-body h3 a { color: var(--text); text-decoration: none; }
+.recipe-card-body h3 a:hover { color: var(--primary); }
+.recipe-card-desc { color: var(--text-light); font-size: var(--fs-s); margin: 0; }
+.recipe-card-meta { margin-top: auto; display: flex; flex-wrap: wrap; gap: 0.75rem; font-family: var(--font-ui); font-size: var(--fs-xs); color: var(--text-light); }
+.recipe-card-meta strong { color: var(--text); font-weight: 600; }
+
+/* --- Badges thematiques, repris de Quitoque --- */
+.recipe-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; padding: 0; margin: 0; }
+.recipe-tags li, .recipe-tag {
+    font-family: var(--font-ui); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.04em;
+    background: var(--tag-bg); color: var(--tag-text); padding: 0.3rem 0.6rem; border-radius: var(--radius-sm);
+}
+
+/* --- Fiche recette --- */
+.recipe-hero { width: 100%; height: var(--recipe-hero-h); object-fit: cover; display: block; background: var(--background-alt); }
+.recipe-head { max-width: var(--recipe-max); margin: 0 auto; padding: var(--space-lg) var(--space-sm) 0; }
+.recipe-head h1 { font-size: var(--fs-3xl); line-height: 1.15; margin: var(--space-xs) 0 0.35rem; }
+.recipe-subtitle { font-family: var(--font-body); font-size: var(--fs-l); color: var(--text-light); margin: 0 0 var(--space-sm); }
+.recipe-byline { font-family: var(--font-ui); font-size: var(--fs-s); color: var(--text-light); display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+
+/* bandeau de metriques, repris de HelloFresh */
+.recipe-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px;
+    background: var(--border); border: 1px solid var(--border); border-radius: var(--radius-md);
+    overflow: hidden; margin: var(--space-md) 0; }
+.recipe-stat { background: var(--white); padding: 0.85rem 1rem; text-align: center; }
+.recipe-stat dt { font-family: var(--font-ui); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); margin: 0 0 0.2rem; }
+.recipe-stat dd { font-family: var(--font-heading); font-size: var(--fs-xl); font-weight: 600; color: var(--text); margin: 0; line-height: 1.1; }
+
+/* corps : deux colonnes, ingredients a gauche, encarts a droite */
+.recipe-body { max-width: var(--recipe-max); margin: 0 auto; padding: 0 var(--space-sm) var(--space-xl);
+    display: grid; grid-template-columns: 1fr var(--recipe-aside); gap: var(--space-lg); align-items: start; }
+.recipe-main > h2 { font-size: var(--fs-xl); margin: var(--space-lg) 0 var(--space-sm); }
+.recipe-main > h2:first-child { margin-top: var(--space-md); }
+
+/* selecteur de portions, repris de Quitoque */
+.portions { display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-ui); font-size: var(--fs-s); margin-bottom: var(--space-sm); }
+.portions button { font-family: var(--font-ui); font-size: var(--fs-m); line-height: 1; width: 2rem; height: 2rem;
+    border: 1px solid var(--border); background: var(--white); color: var(--text); border-radius: var(--radius-sm); cursor: pointer; }
+.portions button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+.portions button:disabled { opacity: 0.4; cursor: not-allowed; }
+.portions output { font-weight: 600; min-width: 5.5rem; text-align: center; }
+
+.ingredients { list-style: none; padding: 0; margin: 0; }
+.ingredients li { display: flex; justify-content: space-between; gap: var(--space-sm); padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+.ingredients li:last-child { border-bottom: 0; }
+.ingredients .qty { font-family: var(--font-ui); font-variant-numeric: tabular-nums; color: var(--text-light); white-space: nowrap; }
+
+/* etapes illustrees, gabarit HelloFresh, intitules nommes facon Quitoque */
+.steps { list-style: none; counter-reset: step; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-lg); }
+.step { display: grid; grid-template-columns: var(--step-img) 1fr; gap: var(--space-md); align-items: start; }
+.step-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-md); background: var(--background-alt); }
+.step-no-img { display: none; }
+.step h3 { font-size: var(--fs-l); margin: 0 0 0.4rem; counter-increment: step; }
+.step h3::before { content: counter(step) ". "; color: var(--primary); font-variant-numeric: tabular-nums; }
+.step p { margin: 0 0 0.6rem; }
+.step:not(:has(.step-img)) { grid-template-columns: 1fr; }
+
+/* encarts lateraux */
+.recipe-aside > * + * { margin-top: var(--space-md); }
+.recipe-box { border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-sm); background: var(--white); }
+.recipe-box h2, .recipe-box h3 { font-size: var(--fs-m); font-family: var(--font-ui); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); margin: 0 0 0.6rem; }
+.nutrition { list-style: none; padding: 0; margin: 0; font-size: var(--fs-s); }
+.nutrition li { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px solid var(--border); }
+.nutrition li:last-child { border-bottom: 0; }
+.nutrition .val { font-family: var(--font-ui); font-variant-numeric: tabular-nums; color: var(--text); }
+.utensils { list-style: none; padding: 0; margin: 0; font-size: var(--fs-s); }
+.utensils li { padding: 0.3rem 0; color: var(--text-light); }
+.utensils li::before { content: "— "; color: var(--primary); }
+
+/* bloc En bref, propre au site, format cite par les moteurs generatifs */
+.recipe-brief { background: var(--background-alt); border-left: 3px solid var(--primary); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: var(--space-sm) var(--space-md); margin: var(--space-md) 0; }
+.recipe-brief p { font-family: var(--font-ui); font-size: var(--fs-s); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-light); margin: 0 0 0.5rem; }
+.recipe-brief ol { margin: 0; padding-left: 1.2rem; }
+.recipe-brief li { margin-bottom: 0.35rem; }
+
+/* le saviez-vous, repris du chapeau factuel de Quitoque */
+.recipe-fact { border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-sm); background: var(--white); margin: var(--space-md) 0; }
+.recipe-fact strong { font-family: var(--font-ui); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.05em; color: var(--primary); display: block; margin-bottom: 0.3rem; }
+
+@media (max-width: 900px) {
+    .recipe-body { grid-template-columns: 1fr; }
+    .step { grid-template-columns: 1fr; }
+    .recipe-head h1 { font-size: var(--fs-2xl); }
+    .recipe-hub-hero h1 { font-size: var(--fs-3xl); }
+    :root { --recipe-hero-h: 260px; }
 }

@@ -8,7 +8,7 @@
 {{ if eq $lang "en" -}}
 Brunch Story is an independent blog about brunch and breakfast, written by {{ (index .Site.Data.authors "bastien-delorme").name }}, {{ (index (index .Site.Data.authors "bastien-delorme").jobTitle "en") | lower }}. Every article is built on concrete benchmarks: quantities per person, temperatures, timings and costs, so that a reader can act on it the same morning.
 {{- else -}}
-Brunch Story est un blog independant sur le brunch et le petit dejeuner, ecrit par {{ (index .Site.Data.authors "bastien-delorme").name }}, {{ (index (index .Site.Data.authors "bastien-delorme").jobTitle "fr") | lower }}. Chaque article repose sur des reperes concrets : quantites par personne, temperatures, temps de cuisson et couts, pour etre applicable le matin meme.
+Brunch Story est un blog indépendant sur le brunch et le petit déjeuner, écrit par {{ (index .Site.Data.authors "bastien-delorme").name }}, {{ (index (index .Site.Data.authors "bastien-delorme").jobTitle "fr") | lower }}. Chaque article repose sur des repères concrets : quantités par personne, températures, temps de cuisson et coûts, pour être applicable le matin même.
 {{- end }}
 
 ## {{ if eq $lang "en" }}Main content{{ else }}Contenu principal{{ end }}
@@ -21,9 +21,15 @@ Brunch Story est un blog independant sur le brunch et le petit dejeuner, ecrit p
 {{ range (where .Site.RegularPages "Section" "blog").ByDate.Reverse -}}
 - [{{ .Title }}]({{ .Permalink }}) : {{ .Description }}
 {{ end }}
+## {{ if eq $lang "en" }}Recipes{{ else }}Recettes{{ end }}
+
+{{ range (where .Site.RegularPages "Section" "recettes").ByTitle -}}
+{{ $r := .Params.recipe -}}
+- [{{ .Title }}]({{ .Permalink }}) : {{ .Description }}{{ with $r }} (total {{ .totalTime }} min{{ with .yield }}, {{ . }} {{ $r.yieldUnit }}{{ end }}{{ with .calories }}, {{ . }} kcal{{ end }}){{ end }}
+{{ end }}
 ## {{ if eq $lang "en" }}Technical information{{ else }}Informations techniques{{ end }}
 
-- {{ if eq $lang "en" }}Generator{{ else }}Generateur{{ end }} : Hugo
-- {{ if eq $lang "en" }}Hosting{{ else }}Hebergement{{ end }} : GitHub Pages
+- {{ if eq $lang "en" }}Generator{{ else }}Générateur{{ end }} : Hugo
+- {{ if eq $lang "en" }}Hosting{{ else }}Hébergement{{ end }} : GitHub Pages
 - Sitemap : {{ "sitemap.xml" | absLangURL }}
 - RSS : {{ "index.xml" | absLangURL }}

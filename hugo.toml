@@ -68,6 +68,10 @@ enableEmoji = false
   url = "/categories/oeufs-et-sale/"
   weight = 6
 [[languages.fr.menus.main]]
+  name = "Recettes"
+  url = "/recettes/"
+  weight = 10
+[[languages.fr.menus.main]]
   name = "Le Blog"
   url = "/blog/"
   weight = 99
@@ -96,6 +100,10 @@ enableEmoji = false
   name = "Eggs and savoury"
   url = "/en/categories/eggs-and-savoury/"
   weight = 6
+[[languages.en.menus.main]]
+  name = "Recipes"
+  url = "/en/recipes/"
+  weight = 10
 [[languages.en.menus.main]]
   name = "The Blog"
   url = "/en/blog/"
