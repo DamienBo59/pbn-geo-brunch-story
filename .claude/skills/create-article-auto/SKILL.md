@@ -98,11 +98,29 @@ L'agent determine a partir des resultats WebSearch (ou du `kw` seul en mode degr
 Pas d'appel aux skills `/tech-title` ni `/tech-meta-description`. Regles appliquees directement :
 
 ### Title
-- Contient le `kw` en premier tiers de la balise si possible
-- Max 60 caracteres (proxy safe pour 580px en Arial SERP Google)
-- Format cible : `[Kw] : [angle] | [Nom du site]`
-- Le nom du site vient du `hugo.toml` (`title` global)
+
+**NE JAMAIS ecrire le nom du site dans le `title` du frontmatter.** Le theme l'ajoute deja
+tout seul : `themes/brunch-story/layouts/_default/baseof.html` rend
+`{{ .Title }} | {{ .Site.Title }}`. Mettre le suffixe dans le frontmatter le ferait sortir
+**deux fois** dans la balise.
+
+**Le budget de 60 caracteres porte sur le title RENDU**, donc frontmatter + suffixe ajoute
+par le theme, et non sur le seul frontmatter. C'est l'erreur trouvee le 2026-09-12 : les
+**20 articles** des deux blogs du parc perso avaient un title de frontmatter sous 60
+caracteres mais un title rendu de **64 a 88 caracteres**, donc tronque en SERP sur la
+totalite du site. Le defaut venait de cette consigne, qui ne comptait pas le suffixe.
+
+| Blog | `Site.Title` | Suffixe ajoute | Max pour le frontmatter |
+|---|---|---|---|
+| brunch-story.fr | Brunch Story | ` \| Brunch Story` (15) | **45** |
+| mamie-the.fr | Mamie-Thé | ` \| Mamie-Thé` (12) | **48** |
+
+- Format du frontmatter : `[Kw] : [angle]`, **sans nom de site, sans separateur final**
+- Contient le `kw` en debut de title
+- Controle avant de continuer : `python3 -c "print(len('<title frontmatter>') + 15)"` doit
+  donner **60 au maximum**. Si ca depasse, raccourcir l'angle, jamais le `kw`.
 - **Une seule option, choix direct** (pas de 3 options comme en interactif)
+- Meme regle pour la traduction EN, avec le meme suffixe.
 
 ### Meta description
 - Max 155 caracteres (proxy safe pour 920px en Arial SERP)
@@ -138,12 +156,40 @@ Injecter l'ID-slug dans le frontmatter (`author: [id]`). Meme ID pour FR et EN.
 
 ## Etape 5 — Image hero auto
 
+> **Cascade des sources d'image (parc perso, 2026-09-12).** Le script
+> `.claude/scripts/fetch-image.sh` essaie dans cet ordre : **Pexels**, puis **Unsplash**,
+> puis **Wikimedia Commons**, puis **Openverse**, puis un visuel de charte genere en local
+> par `.claude/scripts/make-placeholder.py`. Il ne rend jamais la main sans visuel.
+>
+> **Openverse n'est plus la source nominale, il est l'avant-dernier recours.** Deux raisons :
+> la mesure du parc pro (sur 45 heros, 10 photos franchement hors sujet, 15 generiques, et
+> des URLs mortes), et le fait qu'**`api.openverse.org` est injoignable depuis le Mac de
+> Damien** (timeout, et 403 sur `openverse.org`, mesure du 2026-09-12). C'est **Wikimedia
+> Commons** qui porte donc reellement la cascade tant qu'aucune cle n'est posee.
+>
+> Les cles `PEXELS_API_KEY` et `UNSPLASH_ACCESS_KEY` sont lues dans l'environnement ou dans
+> le `.env` du **Drive perso uniquement**, **jamais dans le repo** : les repos du parc sont
+> publics, et le parc perso n'emprunte rien au Drive datashake. **Au 2026-09-12 aucune des
+> deux n'existe cote perso** : la cascade demarre donc a Commons, et l'article sort quand meme.
+>
+> Le script tient un registre `.claude/hero-sources.json` qui **empeche deux articles de
+> porter la meme photo**. Il est versionne, il ne contient que des identifiants publics.
+>
+> ⚠️ **Le controle visuel de l'image est obligatoire avant publication, quelle que soit la
+> banque.** Mesure du 2026-09-12 sur les 10 premiers heros du parc perso : **3 images a
+> rejeter** malgre un titre de fichier correct, dont un plateau de cantine scolaire pour
+> « plateau petit dejeuner », un muesli chocolate en tete d'un article sur l'index
+> glycemique bas (l'image contredisait le texte), et un fichier intitule « Chamomile Flower »
+> qui **montrait une tout autre plante**. Le titre ne garantit rien sur le contenu.
+
+
+
 Appeler le script existant :
 ```bash
 bash .claude/scripts/fetch-image.sh "<kw traduit en anglais>" "<slug-fr>" "static/images/blog"
 ```
 
-- La query image est le `kw` traduit en anglais (Openverse est majoritairement indexe en anglais).
+- La query image est le `kw` traduit en anglais (les banques sont majoritairement indexees en anglais).
 - Si le script renvoie un code non-zero, retenter **une seule fois** avec une query plus generique (la `category` traduite en anglais).
 - Si 2e echec : **ne pas marquer `failed`**. Continuer la publication sans image hero (champs `image`, `imageAlt`, `imageCredit` omis du frontmatter ou laisses vides). L'absence d'image n'est pas une raison d'avorter : l'article est publie, le site fonctionne sans hero.
 - Recuperer les 3 sorties du script (chemin, alt, credit) pour le frontmatter **uniquement si le script a reussi**.
@@ -201,6 +247,34 @@ readingTime: true
 - Paragraphes aeres, 3-5 phrases max.
 - Pas de separateur horizontal (`---`). Pas de tiret cadratin (—) ni demi-cadratin (–).
 - Si FAQ pertinente : dernier H2 "Questions frequentes" avec `<details><summary>` accordeon. Les Q/R du body correspondent strictement a celles du frontmatter.
+
+
+## Etape 7bis — Controle de score : pourquoi elle n'existe pas ici
+
+Le parc pro fait suivre la redaction d'un **controle de score Datafer** : l'article est
+soumis a l'API, scoré sur les memes criteres que le top 10, et enrichi en une passe si le
+total tombe sous `competitors.avg`. Cette etape **n'a pas d'equivalent dans le parc perso**,
+et c'est volontaire, pas un oubli.
+
+Raison : elle repose sur `DATAFER_API_KEY` (l'API Corpus, outil interne datashake) et sur
+`CRAZYSERP_API_KEY`. **Aucune des deux n'existe cote perso**, et les emprunter au Drive
+datashake reviendrait a relier techniquement les deux parcs, ce que la doctrine interdit.
+
+Consequences a connaitre, pour ne pas chercher une etape absente :
+
+- Le mode d'analyse du parc perso est donc **`websearch`** au sens de la cascade pro, soit
+  le cas 3 sur 4. On n'a ni les structures Hn completes du top 10, ni les termes NLP
+  ponderes, ni le `targetWordCount` calcule sur les concurrents, ni le score /100.
+- **Ce qui reste applicable sans API** : relever la SERP par recherche web sur le `kw`,
+  s'en servir pour verifier qu'aucun geant ne tient le top 3, en deduire les sujets que
+  les concurrents traitent tous, et caler la longueur sur ce qui existe.
+- **Ce qui remplace la barre de score** : les controles mecaniques de l'etape 9, qui eux
+  ne demandent aucune cle. Verifier que chaque lien interne pointe vers une page qui
+  existe, que le budget de title rendu tient dans 60 caracteres, que la FAQ et le
+  BreadcrumbList sortent bien dans le JSON-LD, et que l'image a ete regardee.
+
+Si une cle Datafer perso est posee un jour, reprendre l'etape 7bis de la skill pro telle
+quelle : elle est ecrite pour etre non bloquante et se saute d'elle-meme sans cle.
 
 ## Etape 8 — Redaction EN (traduction directe)
 

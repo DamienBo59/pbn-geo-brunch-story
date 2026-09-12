@@ -1,5 +1,5 @@
 ---
-title: "Recette avocado toast : la méthode et les proportions"
+title: "Recette avocado toast : méthode et dosage"
 h1: "Comment réussir un avocado toast qui tient dans l'assiette ?"
 translationKey: "recette-avocado-toast"
 date: "2026-09-12"

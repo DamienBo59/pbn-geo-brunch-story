@@ -1,9 +1,9 @@
 ---
-title: "Œuf poché : temps de cuisson exact et méthode sans ratage"
+title: "Œuf poché : le temps de cuisson exact"
 h1: "Combien de temps faut-il pour cuire un œuf poché ?"
 translationKey: "oeuf-poche-temps"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Le temps de cuisson exact de l'œuf poché, la température de l'eau et les trois conditions qui évitent le blanc en filaments."
 categories: ["Oeufs et salé"]
 tags: ["oeuf poché", "temps de cuisson", "oeuf poché cuisson", "brunch salé", "oeufs bénédicte"]

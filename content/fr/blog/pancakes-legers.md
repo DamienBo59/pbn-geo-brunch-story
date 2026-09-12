@@ -1,9 +1,9 @@
 ---
-title: "Pancakes légers : les proportions et les gestes qui marchent"
+title: "Pancakes légers : les bonnes proportions"
 h1: "Comment faire des pancakes légers et bien gonflés ?"
 translationKey: "pancakes-legers"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Les proportions exactes, le repos de la pâte et la température de cuisson pour des pancakes légers qui gonflent vraiment."
 categories: ["Pancakes et sucré"]
 tags: ["pancakes légers", "pancakes moelleux", "recette pancakes", "pancakes brunch", "levure chimique"]

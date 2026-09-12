@@ -1,5 +1,5 @@
 ---
-title: "Granola maison : la recette croustillante en clusters"
+title: "Granola maison : la recette en clusters"
 h1: "Comment faire un granola maison bien croustillant ?"
 subtitle: "cuisson basse température et refroidissement sans y toucher"
 translationKey: "granola-maison"

@@ -1,5 +1,5 @@
 ---
-title: "Œufs brouillés crémeux : la méthode qui ne rate pas"
+title: "Œufs brouillés crémeux : la bonne méthode"
 h1: "Comment réussir des œufs brouillés crémeux ?"
 subtitle: "à feu doux, hors du feu une fois sur deux"
 translationKey: "oeufs-brouilles-cremeux"

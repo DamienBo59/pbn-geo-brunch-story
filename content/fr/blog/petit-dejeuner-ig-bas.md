@@ -1,5 +1,5 @@
 ---
-title: "Petit déjeuner IG bas : les aliments et les valeurs"
+title: "Petit déjeuner IG bas : aliments et valeurs"
 h1: "Comment composer un petit déjeuner à index glycémique bas ?"
 translationKey: "petit-dejeuner-ig-bas"
 date: "2026-09-12"

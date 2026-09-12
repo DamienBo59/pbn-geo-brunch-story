@@ -1,9 +1,9 @@
 ---
-title: "What is brunch: definition, timing and what goes on the table"
+title: "What is brunch: definition and timing"
 h1: "What exactly is brunch?"
 translationKey: "quest-ce-quun-brunch"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "The definition of brunch, when it actually starts, what belongs on the table and how much to budget per person."
 categories: ["Hosting a brunch"]
 tags: ["brunch", "brunch definition", "brunch at home", "easy brunch ideas", "sunday brunch"]

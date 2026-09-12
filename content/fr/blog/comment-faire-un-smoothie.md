@@ -1,5 +1,5 @@
 ---
-title: "Comment faire un smoothie : méthode et proportions"
+title: "Comment faire un smoothie : les proportions"
 h1: "Comment faire un smoothie qui a vraiment la bonne texture ?"
 translationKey: "comment-faire-un-smoothie"
 date: "2026-09-12"

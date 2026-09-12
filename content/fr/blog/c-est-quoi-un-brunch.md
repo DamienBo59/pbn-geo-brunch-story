@@ -1,9 +1,9 @@
 ---
-title: "C'est quoi un brunch : définition, horaires et composition"
+title: "C'est quoi un brunch : définition et horaires"
 h1: "C'est quoi un brunch exactement ?"
 translationKey: "quest-ce-quun-brunch"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "La définition du brunch, son horaire réel, ce qu'on met sur la table et le budget à prévoir par personne."
 categories: ["Organiser un brunch"]
 tags: ["brunch", "définition brunch", "brunch maison", "idée brunch simple", "brunch dimanche"]

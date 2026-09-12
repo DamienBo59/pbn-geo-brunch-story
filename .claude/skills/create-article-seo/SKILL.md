@@ -239,7 +239,7 @@ A partir des donnees fetched + SerpAPI :
 
 Regles pixel inline (pas d'appel a `/tech-title` ni `/tech-meta-description`).
 
-- **Title** : <=60 char, kw en premier tiers, format `[Kw] : [angle]`
+- **Title** : format `[Kw] : [angle]`, kw en premier tiers. **Le budget de 60 caracteres porte sur le title RENDU**, suffixe du theme compris (` | Brunch Story` = 15 car, ` | Mamie-Thé` = 12 car), donc **45 caracteres au maximum dans le frontmatter** pour brunch-story et 48 pour mamie-the. Ne jamais ecrire le nom du site dans le frontmatter, le theme l'ajoute. Defaut trouve le 2026-09-12 : les 20 articles du parc perso rendaient 64 a 88 caracteres.
 - **Meta description** : <=155 char, contient kw, phrase descriptive
 
 ### 2.5 Structure Hn
@@ -263,6 +263,34 @@ Contraintes :
 Injecter `author: <id-slug>` dans le frontmatter. Meme ID pour FR et EN.
 
 ### 2.7 Image hero
+
+> **Cascade des sources d'image (parc perso, 2026-09-12).** Le script
+> `.claude/scripts/fetch-image.sh` essaie dans cet ordre : **Pexels**, puis **Unsplash**,
+> puis **Wikimedia Commons**, puis **Openverse**, puis un visuel de charte genere en local
+> par `.claude/scripts/make-placeholder.py`. Il ne rend jamais la main sans visuel.
+>
+> **Openverse n'est plus la source nominale, il est l'avant-dernier recours.** Deux raisons :
+> la mesure du parc pro (sur 45 heros, 10 photos franchement hors sujet, 15 generiques, et
+> des URLs mortes), et le fait qu'**`api.openverse.org` est injoignable depuis le Mac de
+> Damien** (timeout, et 403 sur `openverse.org`, mesure du 2026-09-12). C'est **Wikimedia
+> Commons** qui porte donc reellement la cascade tant qu'aucune cle n'est posee.
+>
+> Les cles `PEXELS_API_KEY` et `UNSPLASH_ACCESS_KEY` sont lues dans l'environnement ou dans
+> le `.env` du **Drive perso uniquement**, **jamais dans le repo** : les repos du parc sont
+> publics, et le parc perso n'emprunte rien au Drive datashake. **Au 2026-09-12 aucune des
+> deux n'existe cote perso** : la cascade demarre donc a Commons, et l'article sort quand meme.
+>
+> Le script tient un registre `.claude/hero-sources.json` qui **empeche deux articles de
+> porter la meme photo**. Il est versionne, il ne contient que des identifiants publics.
+>
+> ⚠️ **Le controle visuel de l'image est obligatoire avant publication, quelle que soit la
+> banque.** Mesure du 2026-09-12 sur les 10 premiers heros du parc perso : **3 images a
+> rejeter** malgre un titre de fichier correct, dont un plateau de cantine scolaire pour
+> « plateau petit dejeuner », un muesli chocolate en tete d'un article sur l'index
+> glycemique bas (l'image contredisait le texte), et un fichier intitule « Chamomile Flower »
+> qui **montrait une tout autre plante**. Le titre ne garantit rien sur le contenu.
+
+
 
 ```bash
 bash .claude/scripts/fetch-image.sh "<kw traduit en anglais>" "<slug-fr>" "static/images/blog"

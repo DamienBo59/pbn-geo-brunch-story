@@ -1,5 +1,5 @@
 ---
-title: "Gaufres croustillantes et moelleuses : la méthode"
+title: "Gaufres croustillantes et moelleuses"
 h1: "Comment obtenir des gaufres croustillantes dehors et moelleuses dedans ?"
 translationKey: "gaufres-croustillantes-moelleuses"
 date: "2026-09-12"

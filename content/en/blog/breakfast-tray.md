@@ -1,5 +1,5 @@
 ---
-title: "Breakfast tray: what to put on it and how much"
+title: "Breakfast tray: what to put on it"
 h1: "What goes on a breakfast tray, and in what quantity?"
 translationKey: "plateau-petit-dejeuner"
 date: "2026-09-12"

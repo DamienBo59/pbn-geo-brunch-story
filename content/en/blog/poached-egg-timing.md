@@ -1,9 +1,9 @@
 ---
-title: "Poached egg: exact timing and a method that does not fail"
+title: "Poached egg: the exact timing"
 h1: "How long does a poached egg take to cook?"
 translationKey: "oeuf-poche-temps"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "The exact cooking time for a poached egg, the right water temperature, and the three conditions that prevent stringy whites."
 categories: ["Eggs and savoury"]
 tags: ["poached egg", "poached egg timing", "egg cooking time", "savoury brunch", "eggs benedict"]

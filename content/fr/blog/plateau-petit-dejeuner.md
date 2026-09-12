@@ -1,5 +1,5 @@
 ---
-title: "Plateau petit déjeuner : quantités et composition"
+title: "Plateau petit déjeuner : quoi mettre dessus"
 h1: "Que mettre sur un plateau petit déjeuner, et en quelle quantité ?"
 translationKey: "plateau-petit-dejeuner"
 date: "2026-09-12"

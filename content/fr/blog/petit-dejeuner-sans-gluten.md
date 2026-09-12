@@ -1,9 +1,9 @@
 ---
-title: "Petit déjeuner sans gluten : quoi manger vraiment le matin"
+title: "Petit déjeuner sans gluten : quoi manger"
 h1: "Que manger au petit déjeuner quand on ne mange pas de gluten ?"
 translationKey: "petit-dejeuner-sans-gluten"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Les options réelles pour un petit déjeuner sans gluten, les pièges d'étiquette et ce qu'il faut vérifier sur l'avoine."
 categories: ["Petit déjeuner sain"]
 tags: ["petit déjeuner sans gluten", "petit dej sans gluten", "sans gluten", "avoine", "brunch sans gluten"]

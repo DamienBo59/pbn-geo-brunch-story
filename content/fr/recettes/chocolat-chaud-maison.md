@@ -1,5 +1,5 @@
 ---
-title: "Chocolat chaud maison : la recette à l'ancienne"
+title: "Chocolat chaud maison : recette à l'ancienne"
 h1: "Comment faire un vrai chocolat chaud maison ?"
 subtitle: "au chocolat noir fondu, pas au cacao en poudre"
 translationKey: "chocolat-chaud-maison"

@@ -1,5 +1,5 @@
 ---
-title: "Pancakes without baking powder: the whipped-whites method"
+title: "Pancakes without baking powder"
 h1: "How do you make pancakes without baking powder?"
 subtitle: "the lift comes from whipped egg whites, not from powder"
 translationKey: "pancakes-sans-levure"

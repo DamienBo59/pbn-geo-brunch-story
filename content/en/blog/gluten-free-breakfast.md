@@ -1,9 +1,9 @@
 ---
-title: "Gluten-free breakfast: what to actually eat in the morning"
+title: "Gluten-free breakfast: what to eat"
 h1: "What can you eat for breakfast when you avoid gluten?"
 translationKey: "petit-dejeuner-sans-gluten"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Real options for a gluten-free breakfast, the label traps to know, and what to check on oats."
 categories: ["Healthy breakfast"]
 tags: ["gluten-free breakfast", "gluten free", "oats gluten", "buckwheat porridge", "gluten-free brunch"]

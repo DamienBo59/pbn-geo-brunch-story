@@ -1,9 +1,9 @@
 ---
-title: "Brunch coffee: how much to make and how to get it right"
+title: "Brunch coffee: how much to make"
 h1: "What coffee should you serve for brunch at home?"
 translationKey: "cafe-brunch"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "How much coffee to plan per person for brunch, which brewing method to choose, and the three settings that actually matter."
 categories: ["Morning drinks"]
 tags: ["brunch coffee", "brunch drinks", "filter coffee", "cappuccino", "brunch at home"]

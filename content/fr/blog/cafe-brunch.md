@@ -1,9 +1,9 @@
 ---
-title: "Café brunch : quelle quantité prévoir et comment le réussir"
+title: "Café brunch : quelle quantité prévoir"
 h1: "Quel café servir pour un brunch à la maison ?"
 translationKey: "cafe-brunch"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Combien de café prévoir par personne pour un brunch, quelle méthode choisir et les trois réglages qui font la différence."
 categories: ["Boissons du matin"]
 tags: ["café brunch", "boissons brunch", "café filtre", "cappuccino", "brunch maison"]

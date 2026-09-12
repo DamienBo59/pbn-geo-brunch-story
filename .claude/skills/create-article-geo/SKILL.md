@@ -128,6 +128,34 @@ Hugo resoudra automatiquement les infos (nom, avatar, bio, role) depuis `data/au
 
 ## Etape 1.5 — Recuperation automatique de l'image hero
 
+> **Cascade des sources d'image (parc perso, 2026-09-12).** Le script
+> `.claude/scripts/fetch-image.sh` essaie dans cet ordre : **Pexels**, puis **Unsplash**,
+> puis **Wikimedia Commons**, puis **Openverse**, puis un visuel de charte genere en local
+> par `.claude/scripts/make-placeholder.py`. Il ne rend jamais la main sans visuel.
+>
+> **Openverse n'est plus la source nominale, il est l'avant-dernier recours.** Deux raisons :
+> la mesure du parc pro (sur 45 heros, 10 photos franchement hors sujet, 15 generiques, et
+> des URLs mortes), et le fait qu'**`api.openverse.org` est injoignable depuis le Mac de
+> Damien** (timeout, et 403 sur `openverse.org`, mesure du 2026-09-12). C'est **Wikimedia
+> Commons** qui porte donc reellement la cascade tant qu'aucune cle n'est posee.
+>
+> Les cles `PEXELS_API_KEY` et `UNSPLASH_ACCESS_KEY` sont lues dans l'environnement ou dans
+> le `.env` du **Drive perso uniquement**, **jamais dans le repo** : les repos du parc sont
+> publics, et le parc perso n'emprunte rien au Drive datashake. **Au 2026-09-12 aucune des
+> deux n'existe cote perso** : la cascade demarre donc a Commons, et l'article sort quand meme.
+>
+> Le script tient un registre `.claude/hero-sources.json` qui **empeche deux articles de
+> porter la meme photo**. Il est versionne, il ne contient que des identifiants publics.
+>
+> ⚠️ **Le controle visuel de l'image est obligatoire avant publication, quelle que soit la
+> banque.** Mesure du 2026-09-12 sur les 10 premiers heros du parc perso : **3 images a
+> rejeter** malgre un titre de fichier correct, dont un plateau de cantine scolaire pour
+> « plateau petit dejeuner », un muesli chocolate en tete d'un article sur l'index
+> glycemique bas (l'image contredisait le texte), et un fichier intitule « Chamomile Flower »
+> qui **montrait une tout autre plante**. Le titre ne garantit rien sur le contenu.
+
+
+
 Chaque article doit obligatoirement avoir une image hero (utilisee dans les cards du blog, la bannière de l'article, og:image et le schema Article JSON-LD). Le systeme recupere automatiquement une image libre de droit compatible usage commercial depuis l'API publique Openverse (federe Wikimedia, Flickr, etc.). Aucune cle API, aucune action manuelle du consultant.
 
 ### Determiner la query image
@@ -236,7 +264,7 @@ Les deux versions ont le meme schema de frontmatter, avec le champ `translationK
 | Champ | Regle |
 |-------|-------|
 | `translationKey` | **OBLIGATOIRE**. Identique entre FR et EN. Format : slug-article-generique (ex: `bienfaits-the-vert`). Ce champ permet a Hugo de lier les 2 versions et de generer le hreflang et le language switcher |
-| `title` | **= meta title HTML (balise <title>) = query fan-out + ajout naturel** dans la langue de l'article (annee, qualificatif, angle, marque). Cible la SERP classique. Max ~60 caracteres / 580px (cf skill `/tech-title`). Exemple : "Meilleure huile essentielle stress : top 5 et avis 2026" |
+| `title` | **= meta title HTML (balise <title>) = query fan-out + ajout naturel** dans la langue de l'article (annee, qualificatif, angle, marque). Cible la SERP classique. **Le budget de 60 caracteres porte sur le title RENDU**, suffixe du theme compris (` | Brunch Story` = 15 car, ` | Mamie-Thé` = 12 car), donc **45 caracteres au maximum dans le frontmatter** pour brunch-story et 48 pour mamie-the. Ne jamais ecrire le nom du site dans le frontmatter, le theme l'ajoute. Defaut trouve le 2026-09-12 : les 20 articles du parc perso rendaient 64 a 88 caracteres. (cf skill `/tech-title`). Exemple : "Meilleure huile essentielle stress : top 5 et avis 2026" |
 | `h1` | **= H1 affiche dans la page = prompt GEO cible reformule naturellement si besoin** dans la langue de l'article (FR : question naturelle en francais, EN : question naturelle en anglais). Garder le prompt tel quel s'il est deja une question bien formee, le reformuler en question naturelle s'il est maladroit. Le layout Hugo doit afficher `h1` en titre principal de l'article (et fallback sur `title` si `h1` non renseigne) |
 | `description` | Meta description optimisee pour la SERP dans la langue de l'article. Max 140 caracteres, contient la query fan-out de la langue |
 | `date` | Date du jour (YYYY-MM-DD). Identique entre FR et EN |
@@ -294,7 +322,7 @@ Lire les commentaires HTML `<!-- NOTES POUR CLAUDE -->` en bas du template chois
 - [ ] Les 2 versions sont creees (FR dans `content/blog/`, EN dans `content/en/blog/`)
 - [ ] Les 2 versions partagent le meme `translationKey` dans le frontmatter
 - [ ] Slug = query fan-out en minuscules, tirets, sans accents, dans la langue de l'article
-- [ ] Frontmatter `title` (= meta title HTML) = query fan-out + ajout naturel court, < 60 caracteres / 580px
+- [ ] Frontmatter `title` (= meta title HTML) = query fan-out + ajout naturel court. **Budget compte sur le title RENDU** : 45 car max dans le frontmatter pour brunch-story (suffixe ` | Brunch Story`), 48 pour mamie-the. Verifier avec `python3 -c "print(len('<title>') + 15)"`, doit donner 60 au maximum
 - [ ] Frontmatter `h1` (= H1 affiche) = prompt GEO cible reformule naturellement si besoin (question naturelle dans la langue de l'article)
 - [ ] Meta description <= 140 caracteres, contient la query fan-out (mot-cle SEO dans la langue)
 - [ ] Auteur renseigne dans le frontmatter (ID slug correspondant a une cle de `data/authors.yaml`, meme ID pour FR et EN)

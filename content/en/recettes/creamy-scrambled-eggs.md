@@ -1,5 +1,5 @@
 ---
-title: "Creamy scrambled eggs: the method that never fails"
+title: "Creamy scrambled eggs: the right method"
 h1: "How do you make creamy scrambled eggs?"
 subtitle: "low heat, constant stirring, salt at the very end"
 translationKey: "oeufs-brouilles-cremeux"

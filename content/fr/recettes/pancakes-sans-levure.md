@@ -1,5 +1,5 @@
 ---
-title: "Pancakes sans levure : la recette aux blancs montés"
+title: "Pancakes sans levure : aux blancs montés"
 h1: "Comment faire des pancakes sans levure chimique ?"
 subtitle: "moelleux obtenu aux blancs en neige, pas à la poudre"
 translationKey: "pancakes-sans-levure"

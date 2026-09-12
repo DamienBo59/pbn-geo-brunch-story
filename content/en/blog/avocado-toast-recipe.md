@@ -1,5 +1,5 @@
 ---
-title: "Avocado toast recipe: the method and the proportions"
+title: "Avocado toast recipe: method and ratios"
 h1: "How do you make an avocado toast that holds together?"
 translationKey: "recette-avocado-toast"
 date: "2026-09-12"

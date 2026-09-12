@@ -1,9 +1,9 @@
 ---
-title: "Light pancakes: the ratios and the moves that work"
+title: "Light pancakes: the ratios that work"
 h1: "How do you make light, well-risen pancakes?"
 translationKey: "pancakes-legers"
 date: "2026-09-06"
-lastmod: "2026-09-06"
+lastmod: "2026-09-12"
 description: "Exact ratios, resting time and cooking temperature for light pancakes that actually rise."
 categories: ["Pancakes and sweet"]
 tags: ["light pancakes", "fluffy pancakes", "pancake recipe", "brunch pancakes", "baking powder"]
