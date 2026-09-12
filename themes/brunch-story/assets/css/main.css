@@ -259,7 +259,8 @@ strong, b { font-weight: 700; color: var(--ink); }
 
 /* --- Panneau mega --- */
 .mega {
-    position: absolute; top: calc(100% + 10px); right: 0; left: auto;
+    position: absolute; top: 100%; right: 0; left: auto;
+    padding-top: 10px;
     transform: translate(0, 8px);
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
@@ -269,8 +270,10 @@ strong, b { font-weight: 700; color: var(--ink); }
 .nav-item:focus-within .mega,
 .nav-item.open .mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(0, 0); }
 
-/* pont invisible pour que le curseur puisse descendre sans fermer */
-.mega::before { content: ""; position: absolute; inset: -14px 0 auto; height: 18px; }
+/* Pas de pseudo-element de liaison : il debordait vers le haut et recouvrait le
+   bas du lien declencheur, si bien qu'en descendant la souris vers le panneau on
+   cliquait sur le pont au lieu du lien. C'est le padding-top du panneau lui-meme
+   qui assure la continuite du survol, sans jamais mordre sur le lien. */
 
 .mega-inner {
     background: var(--white);
@@ -767,6 +770,7 @@ ul.recipe-toc { display: flex; flex-wrap: wrap; gap: .5rem; background: transpar
 .recipe-hub-hero ul.recipe-toc a { background: var(--white); box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
 .recipe-hub-hero ul.recipe-toc a:hover { background: var(--brand); border-color: var(--brand); }
 .article-meta .ico { width: 15px; height: 15px; color: var(--brand); }
+.article-meta > span { display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap; }
 
 /* ==========================================================================
    HUB RECETTES
@@ -998,12 +1002,12 @@ ul.recipe-toc { display: flex; flex-wrap: wrap; gap: .5rem; background: transpar
 
 /* Photo d'ouverture : pleine largeur, en debord maitrise */
 .post-figure {
-    max-width: var(--container-wide); margin: var(--space-md) auto 0;
-    padding: 0 var(--space-md); overflow: hidden;
+    width: min(calc(var(--container-wide) - 2 * var(--space-md)), calc(100% - 2 * var(--space-md)));
+    margin: var(--space-md) auto 0;
+    border-radius: var(--radius-xl); overflow: hidden; background: var(--sand);
 }
 .post-figure img {
-    width: 100%; height: clamp(260px, 42vw, 520px); object-fit: cover;
-    border-radius: var(--radius-xl); display: block; background: var(--sand);
+    width: 100%; height: clamp(260px, 42vw, 520px); object-fit: cover; display: block;
 }
 .post-figure-credit {
     max-width: var(--container-wide); margin: .5rem auto 0; padding: 0 var(--space-md);
@@ -1015,8 +1019,8 @@ ul.recipe-toc { display: flex; flex-wrap: wrap; gap: .5rem; background: transpar
     .post-head-inner { padding: 0 var(--space-sm); }
     .post-standfirst { font-size: 1.08rem; }
     .post-byline-meta { margin-left: 0; width: 100%; }
-    .post-figure, .post-figure-credit { padding: 0 var(--space-sm); }
-    .post-figure img { border-radius: var(--radius-lg); }
+    .post-figure { width: calc(100% - 2 * var(--space-sm)); border-radius: var(--radius-lg); }
+    .post-figure-credit { padding: 0 var(--space-sm); }
 }
 
 /* ==========================================================================
@@ -1177,4 +1181,101 @@ ul.recipe-toc { display: flex; flex-wrap: wrap; gap: .5rem; background: transpar
     .featured-body { padding: var(--space-md); }
     .hero-checks li { font-size: var(--fs-m); }
     .section-head-row { align-items: flex-start; }
+}
+
+/* ==========================================================================
+   PAGES D'ARCHIVE (rubriques, mots-cles, blog)
+   Une archive n'est pas qu'une liste : en-tete affirme, passerelles entre
+   rubriques, un article en grand format puis une grille, la bande recettes de
+   la rubrique, et une sortie en pied de page.
+   ========================================================================== */
+.archive-hero {
+    position: relative; isolation: isolate; overflow: hidden;
+    padding: var(--space-md) 0 var(--space-lg);
+    background: var(--sand);
+}
+.archive-hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: radial-gradient(900px 380px at 12% -20%, rgba(224, 161, 58, .3), transparent 62%),
+                radial-gradient(760px 360px at 92% 0%, rgba(180, 71, 31, .14), transparent 58%);
+}
+.archive-hero .breadcrumb { padding: 0 0 var(--space-md); }
+
+.archive-head { display: flex; align-items: flex-start; gap: var(--space-sm); }
+.archive-ico {
+    display: grid; place-items: center; flex: none;
+    width: 64px; height: 64px; border-radius: var(--radius-pill);
+    background: var(--white); color: var(--brand); box-shadow: var(--shadow-sm);
+}
+.archive-ico .ico { width: 31px; height: 31px; }
+.archive-head h1 { font-size: var(--fs-3xl); margin-bottom: .4rem; }
+.archive-head .lede { margin-bottom: .5rem; }
+.archive-count { font-family: var(--font-ui); font-size: var(--fs-s); font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--brand-dark); }
+
+.archive-chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: var(--space-md); }
+.archive-chips a {
+    display: inline-flex; align-items: center; gap: .45rem;
+    background: var(--white); border: 1px solid var(--line);
+    padding: .45rem 1rem; border-radius: var(--radius-pill);
+    font-family: var(--font-ui); font-size: var(--fs-s); font-weight: 700; color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    transition: background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+}
+.archive-chips a span {
+    font-size: var(--fs-xs); font-weight: 800; color: var(--ink-faint);
+    background: var(--sand); border-radius: var(--radius-pill); padding: .05rem .45rem;
+}
+.archive-chips a:hover { background: var(--brand); border-color: var(--brand); color: var(--white); transform: translateY(-2px); }
+.archive-chips a:hover span { background: rgba(255,255,255,.22); color: var(--white); }
+.archive-chips a.is-current { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.archive-chips a.is-current span { background: rgba(255,255,255,.18); color: var(--white); }
+
+.archive-body { padding: var(--space-xl) 0; }
+
+/* --- Article a la une de l'archive --- */
+.archive-featured {
+    display: grid; grid-template-columns: 1fr 1fr; align-items: stretch;
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius-xl); overflow: hidden;
+    box-shadow: var(--shadow-md); margin-bottom: var(--space-lg);
+    transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+.archive-featured:hover { box-shadow: var(--shadow-lg); border-color: var(--line-strong); }
+.archive-featured-media { position: relative; overflow: hidden; background: var(--sand); min-height: 340px; }
+.archive-featured-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms cubic-bezier(.2,.6,.2,1); }
+.archive-featured:hover .archive-featured-media img { transform: scale(1.04); }
+.archive-featured-body { padding: var(--space-lg); display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; justify-content: center; }
+.archive-featured-body h2 { font-size: var(--fs-2xl); line-height: 1.12; }
+.archive-featured-body h2 a { color: var(--ink); }
+.archive-featured-body h2 a:hover { color: var(--brand); }
+.archive-featured-body > p { color: var(--ink-soft); font-size: var(--fs-l); line-height: 1.55; }
+
+.archive-grid { margin-top: 0; }
+.archive-grid .post-card-meta { color: var(--ink-faint); }
+.archive-grid .post-card-meta .ico { color: var(--brand); }
+
+/* --- Bande recettes de la rubrique --- */
+.archive-recipes { padding: var(--space-xl) 0; background: var(--sand); }
+
+/* --- Sortie de page --- */
+.archive-cta { padding: 0 0 var(--space-xl); }
+.cta-band {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: var(--space-md); background: var(--ink); color: rgba(255,255,255,.72);
+    border-radius: var(--radius-xl); padding: var(--space-lg);
+    margin-top: var(--space-xl);
+}
+.cta-band h2 { color: var(--white); font-size: var(--fs-2xl); margin-bottom: .35rem; }
+.cta-band p { font-size: var(--fs-m); max-width: 56ch; }
+
+@media (max-width: 940px) {
+    .archive-featured { grid-template-columns: 1fr; }
+    .archive-featured-media { min-height: 240px; }
+}
+@media (max-width: 760px) {
+    .archive-head { flex-direction: column; gap: var(--space-xs); }
+    .archive-ico { width: 52px; height: 52px; }
+    .archive-ico .ico { width: 26px; height: 26px; }
+    .archive-featured-body { padding: var(--space-md); }
+    .cta-band { padding: var(--space-md); }
 }

@@ -1,45 +1,156 @@
 {{ define "main" }}
+{{ $lang := .Site.Language.Lang }}
+{{ $en := eq $lang "en" }}
+{{ $hub := .Site.GetPage (printf "/%s/recettes" (cond $en "en" "fr")) }}
+{{ if not $hub }}{{ $hub = .Site.GetPage "/recettes" }}{{ end }}
 
-<section class="list-header">
+{{/* Une page de rubrique peut contenir des articles ET des recettes, puisque les
+     deux partagent les memes categories. On les separe, chacun dans son
+     traitement, plutot que de les melanger dans une liste indifferenciee. */}}
+{{ $all := .Pages }}
+{{ $posts := where $all "Section" "blog" }}
+{{ $recipesHere := where $all "Section" "recettes" }}
+{{ $isTag := eq .Data.Plural "tags" }}
+{{ $isCat := eq .Data.Plural "categories" }}
+
+{{/* Icone de la rubrique, reprise des familles de recettes quand ca correspond */}}
+{{ $icon := "list" }}
+{{ with $hub }}{{ range .Params.groups }}{{ if eq .category $.Title }}{{ $icon = .icon }}{{ end }}{{ end }}{{ end }}
+{{ if $isTag }}{{ $icon = "list" }}{{ end }}
+
+<section class="archive-hero">
     <div class="container">
-        <h1>{{ .Title }}</h1>
-        {{ with .Description }}<p class="list-description">{{ . }}</p>{{ end }}
-        <span class="list-count">{{ i18n "article" (len .Pages) }}</span>
+        <nav class="breadcrumb" aria-label="{{ if $en }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
+            <ol class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="{{ "/" | relLangURL }}">{{ if $en }}Home{{ else }}Accueil{{ end }}</a></li>
+                {{ if or $isTag $isCat }}
+                <li class="breadcrumb-sep" aria-hidden="true">/</li>
+                <li class="breadcrumb-item"><a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}">Blog</a></li>
+                {{ end }}
+                <li class="breadcrumb-sep" aria-hidden="true">/</li>
+                <li class="breadcrumb-item" aria-current="page">{{ .Title }}</li>
+            </ol>
+        </nav>
+
+        <div class="archive-head">
+            <span class="archive-ico">{{ partial "icon.html" $icon }}</span>
+            <div>
+                <span class="section-kicker">
+                    {{ if $isTag }}{{ if $en }}Tag{{ else }}Mot-clé{{ end }}
+                    {{ else if $isCat }}{{ if $en }}Section{{ else }}Rubrique{{ end }}
+                    {{ else }}{{ if $en }}All articles{{ else }}Tous les articles{{ end }}{{ end }}
+                </span>
+                <h1>{{ partial "fr-typo.html" (.Params.h1 | default .Title) }}</h1>
+                {{ with .Description }}<p class="lede">{{ partial "fr-typo.html" . }}</p>{{ end }}
+                <p class="archive-count">
+                    {{ len $posts }} {{ i18n "article" (len $posts) }}{{ with $recipesHere }} · {{ len . }} {{ if $en }}recipe{{ if ne (len .) 1 }}s{{ end }}{{ else }}recette{{ if ne (len .) 1 }}s{{ end }}{{ end }}{{ end }}
+                </p>
+            </div>
+        </div>
+
+        {{/* Passerelles vers les autres rubriques : utile au lecteur, et ca fait
+             respirer une page d'archive qui serait sinon une simple liste. */}}
+        {{ if or $isCat (not (or $isTag $isCat)) }}
+        <ul class="archive-chips">
+            {{ range $name, $terms := .Site.Taxonomies.categories }}
+            {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
+            {{ with $term }}
+            <li><a href="{{ .Permalink }}"{{ if eq .Title $.Title }} class="is-current" aria-current="page"{{ end }}>{{ .Title }} <span>{{ len $terms }}</span></a></li>
+            {{ end }}
+            {{ end }}
+        </ul>
+        {{ end }}
     </div>
 </section>
 
-<section class="list-content">
+<div class="archive-body">
     <div class="container">
-        <div class="articles-list">
-            {{ range .Pages.ByDate.Reverse }}
-            <article class="article-card-horizontal">
-                <a href="{{ .RelPermalink }}" class="article-card-horizontal-image-wrapper" aria-label="{{ .Title }}">
+
+        {{/* A la une : le premier article passe en grand format, le reste en grille.
+             Deux formats valent mieux qu'une colonne uniforme. */}}
+        {{ $sorted := $posts.ByDate.Reverse }}
+        {{ with $sorted }}
+        {{ $first := index . 0 }}
+        {{ $rest := after 1 . }}
+
+        <article class="archive-featured" data-reveal>
+            <a href="{{ $first.RelPermalink }}" class="archive-featured-media" aria-label="{{ $first.Title }}">
+                {{ if $first.Params.image }}
+                <img src="{{ $first.Params.image | relURL }}" alt="{{ $first.Params.imageAlt | default $first.Title }}" width="800" height="560" loading="eager">
+                {{ else }}<span class="recipe-card-ph" aria-hidden="true">{{ slicestr $first.Title 0 1 }}</span>{{ end }}
+            </a>
+            <div class="archive-featured-body">
+                <span class="featured-kicker">{{ if $en }}Start here{{ else }}À lire en premier{{ end }}</span>
+                <h2><a href="{{ $first.RelPermalink }}">{{ partial "fr-typo.html" $first.Title }}</a></h2>
+                <p>{{ $first.Description }}</p>
+                <div class="article-meta">
+                    {{ with $first.Params.categories }}<span class="article-category">{{ index . 0 }}</span><span class="meta-separator">·</span>{{ end }}
+                    <time>{{ time.Format "2 January 2006" $first.Date }}</time>
+                    <span class="meta-separator">·</span>
+                    <span>{{ partial "icon.html" "clock" }}{{ $first.ReadingTime }} {{ if $en }}min read{{ else }}min de lecture{{ end }}</span>
+                </div>
+                <a href="{{ $first.RelPermalink }}" class="btn-primary">{{ i18n "read_more" }}{{ partial "icon.html" "arrow" }}</a>
+            </div>
+        </article>
+
+        {{ with $rest }}
+        <div class="grid-articles archive-grid">
+            {{ range . }}
+            <article class="article-card" data-reveal>
+                <a href="{{ .RelPermalink }}" class="article-card-image-wrapper" aria-label="{{ .Title }}">
                     {{ if .Params.image }}
-                    <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="article-card-horizontal-image" loading="lazy" width="300" height="200">
+                    <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="article-card-image" loading="lazy" width="600" height="400">
                     {{ else }}
-                    <span class="article-card-horizontal-image article-card-image-placeholder" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>
+                    <span class="article-card-image article-card-image-placeholder" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>
                     {{ end }}
                 </a>
                 <div class="article-card-body">
                     <div class="article-meta">
-                        {{ with .Params.categories }}
-                        <span class="article-category">{{ index . 0 }}</span>
-                        {{ end }}
+                        {{ with .Params.categories }}<span class="article-category">{{ index . 0 }}</span><span class="meta-separator">·</span>{{ end }}
                         <time>{{ time.Format "2 January 2006" .Date }}</time>
-                        {{ if .Params.readingTime }}
-                        <span class="reading-time">{{ .ReadingTime }} min</span>
-                        {{ end }}
                     </div>
-                    <h2><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h2>
-                    <p class="article-description">{{ .Description }}</p>
-                    <div class="article-tags">
-                        {{ range .Params.tags }}
-                        <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag">#{{ . }}</a>
-                        {{ end }}
-                    </div>
+                    <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
+                    <p class="article-description">{{ .Description | truncate 120 }}</p>
+                    <span class="post-card-meta">{{ partial "icon.html" "clock" }}{{ .ReadingTime }} {{ if $en }}min read{{ else }}min de lecture{{ end }}</span>
                 </div>
             </article>
             {{ end }}
+        </div>
+        {{ end }}
+        {{ else }}
+        <p class="lede">{{ if $en }}Nothing here yet.{{ else }}Rien ici pour le moment.{{ end }}</p>
+        {{ end }}
+    </div>
+</div>
+
+{{/* Les recettes de la rubrique, dans leur propre bande : c'est le pont entre le
+     magazine et la cuisine, et ca evite de melanger les deux gabarits. */}}
+{{ with $recipesHere }}
+<section class="archive-recipes">
+    <div class="container">
+        <div class="section-head section-head-row" data-reveal>
+            <div>
+                <span class="section-kicker">{{ if $en }}And in the kitchen{{ else }}Et en cuisine{{ end }}</span>
+                <h2 class="section-title">{{ if $en }}The recipes in this section{{ else }}Les recettes de la rubrique{{ end }}</h2>
+            </div>
+            {{ with $hub }}<a href="{{ .Permalink }}" class="btn-outline">{{ if $en }}All recipes{{ else }}Toutes les recettes{{ end }}{{ partial "icon.html" "arrow" }}</a>{{ end }}
+        </div>
+        <div class="recipe-grid">
+            {{ range .ByDate.Reverse }}{{ partial "recipe-card.html" (dict "page" .) }}{{ end }}
+        </div>
+    </div>
+</section>
+{{ end }}
+
+{{/* Pied d'archive : on ne laisse jamais le lecteur sur un cul-de-sac */}}
+<section class="archive-cta">
+    <div class="container">
+        <div class="cta-band" data-reveal>
+            <div>
+                <h2>{{ if $en }}Looking for something to cook?{{ else }}Vous cherchez quoi cuisiner&nbsp;?{{ end }}</h2>
+                <p>{{ if $en }}Real timings, quantities per person, nutrition estimated from the ingredients.{{ else }}Des temps réels, des quantités par personne, des valeurs estimées depuis les ingrédients.{{ end }}</p>
+            </div>
+            {{ with $hub }}<a href="{{ .Permalink }}" class="btn-primary">{{ if $en }}See the recipes{{ else }}Voir les recettes{{ end }}{{ partial "icon.html" "arrow" }}</a>{{ end }}
         </div>
     </div>
 </section>
