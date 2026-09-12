@@ -4,127 +4,220 @@
 {{ $hub := .Site.GetPage (printf "/%s/recettes" (cond $en "en" "fr")) }}
 {{ if not $hub }}{{ $hub = .Site.GetPage "/recettes" }}{{ end }}
 {{ $recipes := where .Site.RegularPages "Section" "recettes" }}
+{{ $posts := where .Site.RegularPages "Section" "blog" }}
+{{ $featured := index (sort $recipes "Date" "desc") 0 }}
 
-<!-- Hero, image de fond en parallax -->
-<section class="hero" data-parallax="0.22">
-    <div class="hero-bg" style="background-image:url({{ "images/hero-brunch.webp" | relURL }})" role="img" aria-label="{{ if $en }}Brunch table seen from above{{ else }}Table de brunch vue de dessus{{ end }}"></div>
-    <div class="container">
-        <div class="hero-content">
+<!-- ============ HERO en deux colonnes : texte a gauche, photo a droite ============ -->
+<section class="hero-split">
+    <div class="hero-split-inner">
+        <div class="hero-split-text">
             <span class="hero-badge">{{ partial "icon.html" "cup" }}{{ i18n "hero_badge" }}</span>
-            <h1>{{ i18n "hero_title" }}</h1>
-            <p class="hero-description">{{ i18n "hero_description" }}</p>
+            <h1>{{ if $en }}What a brunch is <mark>actually worth</mark>, and what you make better at home{{ else }}Ce qui vaut le prix du brunch, et ce qui se refait <mark>mieux chez soi</mark>{{ end }}</h1>
+            <ul class="hero-checks">
+                <li>{{ partial "icon.html" "timer" }}<span>{{ if $en }}Timings <strong>measured, not copied</strong>{{ else }}Des temps <strong>mesurés, pas recopiés</strong>{{ end }}</span></li>
+                <li>{{ partial "icon.html" "scale" }}<span>{{ if $en }}Quantities <strong>per person</strong>, adjustable{{ else }}Les quantités <strong>par personne</strong>, ajustables{{ end }}</span></li>
+                <li>{{ partial "icon.html" "flame" }}<span>{{ if $en }}The <strong>temperature</strong> that changes the result{{ else }}La <strong>température</strong> qui change le résultat{{ end }}</span></li>
+                <li>{{ partial "icon.html" "bulb" }}<span>{{ if $en }}No three-paragraph preamble{{ else }}Zéro préambule de trois paragraphes{{ end }}</span></li>
+            </ul>
             <div class="hero-actions">
                 {{ with $hub }}<a href="{{ .Permalink }}" class="btn-primary">{{ if $en }}See the recipes{{ else }}Voir les recettes{{ end }}{{ partial "icon.html" "arrow" }}</a>{{ end }}
                 <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="btn-outline">{{ i18n "explore_blog" }}</a>
             </div>
+            <p class="hero-note">{{ len $recipes }} {{ if $en }}recipes{{ else }}recettes{{ end }} · {{ len $posts }} {{ if $en }}articles{{ else }}articles{{ end }} · {{ if $en }}written by{{ else }}écrit par{{ end }} {{ (index .Site.Data.authors "bastien-delorme").name }}</p>
+        </div>
+        <div class="hero-split-media" data-parallax="0.1">
+            <img src="{{ "images/hero-brunch.webp" | relURL }}" alt="{{ if $en }}Brunch table seen from above{{ else }}Table de brunch vue de dessus{{ end }}" width="1200" height="900" fetchpriority="high">
         </div>
     </div>
 </section>
 
-<!-- Bande d'arguments -->
+<!-- ============ Bande d'arguments ============ -->
 <section class="feature-band">
     <div class="feature-band-inner">
-        <div class="feature">
-            <span class="feature-ico">{{ partial "icon.html" "timer" }}</span>
-            <div><div class="feature-t">{{ if $en }}Real timings{{ else }}Des temps réels{{ end }}</div><div class="feature-d">{{ if $en }}measured, not copied{{ else }}mesurés, pas recopiés{{ end }}</div></div>
-        </div>
-        <div class="feature">
-            <span class="feature-ico">{{ partial "icon.html" "scale" }}</span>
-            <div><div class="feature-t">{{ if $en }}Quantities per person{{ else }}Quantités par personne{{ end }}</div><div class="feature-d">{{ if $en }}adjustable in one click{{ else }}ajustables en un clic{{ end }}</div></div>
-        </div>
-        <div class="feature">
-            <span class="feature-ico">{{ partial "icon.html" "flame" }}</span>
-            <div><div class="feature-t">{{ if $en }}Temperatures{{ else }}Des températures{{ end }}</div><div class="feature-d">{{ if $en }}the number that changes it{{ else }}le chiffre qui change tout{{ end }}</div></div>
-        </div>
-        <div class="feature">
-            <span class="feature-ico">{{ partial "icon.html" "bulb" }}</span>
-            <div><div class="feature-t">{{ if $en }}No three-paragraph intro{{ else }}Zéro préambule{{ end }}</div><div class="feature-d">{{ if $en }}straight to the method{{ else }}direct à la méthode{{ end }}</div></div>
-        </div>
+        <div class="feature"><span class="feature-ico">{{ partial "icon.html" "timer" }}</span><div><div class="feature-t">{{ if $en }}Real timings{{ else }}Des temps réels{{ end }}</div><div class="feature-d">{{ if $en }}measured, not copied{{ else }}mesurés, pas recopiés{{ end }}</div></div></div>
+        <div class="feature"><span class="feature-ico">{{ partial "icon.html" "scale" }}</span><div><div class="feature-t">{{ if $en }}Per person{{ else }}Par personne{{ end }}</div><div class="feature-d">{{ if $en }}adjustable in one click{{ else }}ajustables en un clic{{ end }}</div></div></div>
+        <div class="feature"><span class="feature-ico">{{ partial "icon.html" "flame" }}</span><div><div class="feature-t">{{ if $en }}Temperatures{{ else }}Des températures{{ end }}</div><div class="feature-d">{{ if $en }}the number that decides{{ else }}le chiffre qui décide{{ end }}</div></div></div>
+        <div class="feature"><span class="feature-ico">{{ partial "icon.html" "bulb" }}</span><div><div class="feature-t">{{ if $en }}Straight to it{{ else }}Direct au sujet{{ end }}</div><div class="feature-d">{{ if $en }}no preamble{{ else }}zéro préambule{{ end }}</div></div></div>
     </div>
 </section>
 
-<!-- Rubriques, avec les icones des familles de recettes -->
-<section class="categories-section">
+<!-- ============ Par envie : choix vers les familles de recettes ============ -->
+<section class="section-pick">
     <div class="container">
-        <h2 class="section-title" data-reveal>{{ if $en }}Where to start{{ else }}Par où commencer{{ end }}</h2>
-        <p class="section-lede" data-reveal>{{ if $en }}Four families of recipes, and the articles that go with them.{{ else }}Quatre familles de recettes, et les articles qui vont avec.{{ end }}</p>
-        <div class="grid-categories">
-            {{ with $hub }}{{ range .Params.groups }}
-            {{ $cat := .category }}
-            {{ $in := where $recipes "Params.categories" "intersect" (slice $cat) }}
-            <a href="{{ $hub.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="category-card" data-reveal>
-                <span class="mega-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>
-                <h3>{{ .title }}</h3>
-                <p>{{ .lede | truncate 92 }}</p>
-                <span class="category-count">{{ len $in }} {{ if $en }}recipe{{ if ne (len $in) 1 }}s{{ end }}{{ else }}recette{{ if ne (len $in) 1 }}s{{ end }}{{ end }}</span>
+        <div class="section-head" data-reveal>
+            <h2 class="section-title">{{ if $en }}What do you feel like?{{ else }}Vous avez envie de quoi&nbsp;?{{ end }}</h2>
+            <p class="section-lede">{{ if $en }}Four families, one click away.{{ else }}Quatre familles, à un clic.{{ end }}</p>
+        </div>
+        {{ with $hub }}
+        <div class="pick-grid">
+            {{ range .Params.groups }}
+            {{ $in := where $recipes "Params.categories" "intersect" (slice .category) }}
+            <a href="{{ $hub.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="pick-card" data-reveal>
+                <span class="pick-ico">{{ partial "icon.html" (.icon | default "bowl") }}</span>
+                <span class="pick-title">{{ .title }}</span>
+                <span class="pick-count">{{ len $in }} {{ if $en }}recipe{{ if ne (len $in) 1 }}s{{ end }}{{ else }}recette{{ if ne (len $in) 1 }}s{{ end }}{{ end }}</span>
+                <span class="pick-go">{{ partial "icon.html" "arrow" }}</span>
             </a>
-            {{ end }}{{ end }}
+            {{ end }}
         </div>
+        {{ end }}
     </div>
 </section>
 
-<!-- Recettes a la une -->
-{{ with first 4 (sort $recipes "Date" "desc") }}
-<section class="latest-section">
+<!-- ============ Recette a la une ============ -->
+{{ with $featured }}
+{{ $r := .Params.recipe }}
+<section class="section-featured">
     <div class="container">
-        <h2 class="section-title" data-reveal>{{ if $en }}The recipes{{ else }}Les recettes{{ end }}</h2>
-        <p class="section-lede" data-reveal>{{ if $en }}Real timings, adjustable quantities, estimated nutrition.{{ else }}Temps réels, quantités ajustables, valeurs nutritionnelles estimées.{{ end }}</p>
-        <div class="recipe-grid">
-            {{ range . }}
-            {{ $r := .Params.recipe }}
-            <article class="recipe-card" data-reveal>
-                <a href="{{ .RelPermalink }}" aria-label="{{ .Title }}">
-                    {{ if .Params.image }}
-                    <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="recipe-card-img" loading="lazy" width="400" height="300">
-                    {{ else }}
-                    <span class="recipe-card-ph" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>
-                    {{ end }}
-                </a>
-                <div class="recipe-card-body">
-                    {{ with $r.badges }}<div class="recipe-tags">{{ range first 2 . }}<span class="tag">{{ . }}</span>{{ end }}</div>{{ end }}
-                    <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
-                    <p class="recipe-card-desc">{{ .Description | truncate 96 }}</p>
-                    {{ with $r }}
-                    <div class="article-meta">
-                        {{ with .totalTime }}{{ partial "icon.html" "clock" }} {{ . }} min{{ end }}
-                        {{ with .calories }}<span class="meta-separator">·</span>{{ partial "icon.html" "flame" }} {{ . }} kcal{{ end }}
-                    </div>
-                    {{ end }}
+        <div class="featured" data-reveal>
+            <a href="{{ .RelPermalink }}" class="featured-media" aria-label="{{ .Title }}">
+                {{ with .Params.image }}<img src="{{ . | relURL }}" alt="{{ $.Title }}" width="800" height="600" loading="lazy">{{ end }}
+                {{ with $r.totalTime }}<span class="recipe-card-time">{{ partial "icon.html" "clock" }}{{ . }} min</span>{{ end }}
+            </a>
+            <div class="featured-body">
+                <span class="featured-kicker">{{ if $en }}Recipe of the moment{{ else }}La recette du moment{{ end }}</span>
+                <h3>{{ partial "fr-typo.html" (.Params.h1 | default .Title) }}</h3>
+                {{ with .Params.subtitle }}<p class="featured-sub">{{ . }}</p>{{ end }}
+                {{ with $r.brief }}
+                <ul class="featured-points">
+                    {{ range first 3 . }}<li>{{ partial "icon.html" "arrow" }}<span>{{ . | markdownify }}</span></li>{{ end }}
+                </ul>
+                {{ end }}
+                <div class="featured-stats">
+                    {{ with $r.prepTime }}<div><span class="v">{{ . }}</span><span class="k">min {{ if $en }}prep{{ else }}de préparation{{ end }}</span></div>{{ end }}
+                    {{ with $r.calories }}<div><span class="v">{{ . }}</span><span class="k">kcal {{ if $en }}per serving{{ else }}par portion{{ end }}</span></div>{{ end }}
+                    {{ with $r.yield }}<div><span class="v">{{ . }}</span><span class="k">{{ $r.yieldUnit }}</span></div>{{ end }}
                 </div>
-            </article>
-            {{ end }}
+                <a href="{{ .RelPermalink }}" class="btn-primary">{{ if $en }}See the recipe{{ else }}Voir la recette{{ end }}{{ partial "icon.html" "arrow" }}</a>
+            </div>
         </div>
     </div>
 </section>
 {{ end }}
 
-<!-- Derniers articles -->
-<section class="latest-section" style="background:var(--sand)">
+<!-- ============ Toutes les recettes ============ -->
+{{ with first 4 (sort $recipes "Date" "desc") }}
+<section class="section-recipes">
     <div class="container">
-        <h2 class="section-title" data-reveal>{{ i18n "latest_articles" }}</h2>
-        <div class="grid-articles">
-            {{ range first 6 (where .Site.RegularPages "Section" "blog") }}
-            <article class="article-card" data-reveal>
-                <a href="{{ .RelPermalink }}" class="article-card-image-wrapper" aria-label="{{ .Title }}">
+        <div class="section-head section-head-row" data-reveal>
+            <div>
+                <h2 class="section-title">{{ if $en }}The recipes{{ else }}Les recettes{{ end }}</h2>
+                <p class="section-lede">{{ if $en }}Real timings, adjustable quantities, nutrition estimated from the ingredients.{{ else }}Temps réels, quantités ajustables, valeurs nutritionnelles estimées depuis les ingrédients.{{ end }}</p>
+            </div>
+            {{ with $hub }}<a href="{{ .Permalink }}" class="btn-outline">{{ if $en }}All recipes{{ else }}Toutes les recettes{{ end }}{{ partial "icon.html" "arrow" }}</a>{{ end }}
+        </div>
+        <div class="recipe-grid recipe-grid-4">
+            {{ range . }}{{ partial "recipe-card.html" (dict "page" .) }}{{ end }}
+        </div>
+    </div>
+</section>
+{{ end }}
+
+<!-- ============ Le blog, traite en bande editoriale distincte ============ -->
+<section class="section-editorial">
+    <div class="container">
+        <div class="section-head section-head-row" data-reveal>
+            <div>
+                <span class="section-kicker">{{ if $en }}The magazine{{ else }}Le magazine{{ end }}</span>
+                <h2 class="section-title">{{ if $en }}Reading, not cooking{{ else }}Ce qui se lit, pas ce qui se cuisine{{ end }}</h2>
+                <p class="section-lede">{{ if $en }}The price of a brunch, the settings that matter, the label traps.{{ else }}Le prix d'un brunch, les réglages qui comptent, les pièges d'étiquette.{{ end }}</p>
+            </div>
+            <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="btn-outline">{{ if $en }}All articles{{ else }}Tous les articles{{ end }}{{ partial "icon.html" "arrow" }}</a>
+        </div>
+        <div class="post-grid">
+            {{ range first 4 $posts }}
+            <article class="post-card" data-reveal>
+                <a href="{{ .RelPermalink }}" class="post-card-media" aria-label="{{ .Title }}">
                     {{ if .Params.image }}
-                    <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="article-card-image" loading="lazy" width="600" height="400">
-                    {{ else }}
-                    <span class="article-card-image article-card-image-placeholder" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>
-                    {{ end }}
+                    <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" loading="lazy" width="600" height="400">
+                    {{ else }}<span class="recipe-card-ph" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>{{ end }}
                 </a>
-                <div class="article-card-body">
-                    <div class="article-meta">
-                        {{ with .Params.categories }}<span class="article-category">{{ index . 0 }}</span><span class="meta-separator">·</span>{{ end }}
-                        <time>{{ time.Format "2 January 2006" .Date }}</time>
-                    </div>
+                <div class="post-card-body">
+                    {{ with .Params.categories }}<span class="post-card-cat">{{ index . 0 }}</span>{{ end }}
                     <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
-                    <p class="article-description">{{ .Description }}</p>
-                    <a href="{{ .RelPermalink }}" class="read-more">{{ i18n "read_more" }}{{ partial "icon.html" "arrow" }}</a>
+                    <p>{{ .Description | truncate 110 }}</p>
+                    <span class="post-card-meta">{{ partial "icon.html" "clock" }}{{ .ReadingTime }} {{ if $en }}min read{{ else }}min de lecture{{ end }}</span>
                 </div>
             </article>
             {{ end }}
         </div>
     </div>
 </section>
+
+<!-- ============ Notre methode ============
+     Quitoque met ici ses avis clients. Un blog sans utilisateurs ne peut pas en
+     avoir de vrais, et en inventer serait trompeur. On met a la place ce qui est
+     verifiable : comment les reperes publies sont obtenus. -->
+<section class="section-method">
+    <div class="container">
+        <div class="section-head section-head-center" data-reveal>
+            <span class="section-kicker">{{ if $en }}Our method{{ else }}Notre méthode{{ end }}</span>
+            <h2 class="section-title">{{ if $en }}Where the numbers come from{{ else }}D'où viennent les chiffres{{ end }}</h2>
+        </div>
+        <div class="method-grid">
+            <div class="method" data-reveal>
+                <span class="method-ico">{{ partial "icon.html" "timer" }}</span>
+                <h3>{{ if $en }}Timings are cooked, not copied{{ else }}Les temps sont cuisinés, pas recopiés{{ end }}</h3>
+                <p>{{ if $en }}Every prep and cook time on this site is the one actually taken, on a domestic hob and a domestic oven, not the one repeated from one recipe site to the next.{{ else }}Chaque temps de préparation et de cuisson publié ici est celui réellement constaté, sur une plaque et un four domestiques, pas celui recopié d'un site de recettes à l'autre.{{ end }}</p>
+            </div>
+            <div class="method" data-reveal>
+                <span class="method-ico">{{ partial "icon.html" "scale" }}</span>
+                <h3>{{ if $en }}Nutrition is calculated, never guessed{{ else }}Les valeurs sont calculées, jamais estimées à vue{{ end }}</h3>
+                <p>{{ if $en }}Calories, protein, fat and fibre are computed from the listed ingredients and their exact weights, then divided by the yield. They are estimates, and they are labelled as such on every recipe.{{ else }}Calories, protéines, lipides et fibres sont calculés depuis les ingrédients listés et leurs grammages exacts, puis divisés par le nombre de portions. Ce sont des estimations, et c'est écrit sur chaque recette.{{ end }}</p>
+            </div>
+            <div class="method" data-reveal>
+                <span class="method-ico">{{ partial "icon.html" "bulb" }}</span>
+                <h3>{{ if $en }}No invented ratings{{ else }}Aucune note inventée{{ end }}</h3>
+                <p>{{ if $en }}You will not find a star rating or a Nutri-Score here. A blog with no users has no real ratings, and a Nutri-Score needs per-100g data we do not have. Publishing either would be a decoration, not information.{{ else }}Vous ne trouverez ici ni note en étoiles ni Nutri-Score. Un blog sans utilisateurs n'a pas de vraies notes, et un Nutri-Score exige des valeurs pour 100 g dont nous ne disposons pas. En afficher serait une décoration, pas une information.{{ end }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+{{ $faq := slice }}
+{{ if $en }}
+{{ $faq = slice
+  (dict "q" "What time does brunch start?" "a" "Brunch runs from 11am to 3pm, with most places seating between 11.30am and 1pm. Earlier than 11am it is breakfast; later than 3pm the savoury dishes are usually gone.")
+  (dict "q" "How much food should I plan per person for a brunch at home?" "a" "Count two savoury items, one sweet item and one drink per person, which comes to roughly 500 to 600 g of food. For six people that is about a dozen eggs, a loaf of bread and 1.5 litres of drinks.")
+  (dict "q" "Which brunch dishes can be made ahead?" "a" "Granola keeps ten days, hot chocolate reheats for 48 hours, and pancake batter without whipped whites holds overnight. Eggs are the only thing that has to be cooked to order.")
+  (dict "q" "How much does a homemade brunch cost?" "a" "Between 4 and 7 euros per person for a full table, against 25 to 35 euros in a Paris brunch spot. The gap is almost entirely the drinks and the service.")
+}}
+{{ else }}
+{{ $faq = slice
+  (dict "q" "À quelle heure commence un brunch ?" "a" "Le brunch court de 11 h à 15 h, avec un pic de service entre 11 h 30 et 13 h. Avant 11 h c'est un petit déjeuner ; après 15 h, les plats salés sont généralement épuisés.")
+  (dict "q" "Quelle quantité prévoir par personne pour un brunch à la maison ?" "a" "Comptez deux pièces salées, une pièce sucrée et une boisson par personne, soit environ 500 à 600 g de nourriture. Pour six personnes, cela fait une douzaine d'œufs, un pain et 1,5 litre de boissons.")
+  (dict "q" "Quels plats de brunch peuvent se préparer à l'avance ?" "a" "Le granola se garde dix jours, le chocolat chaud se réchauffe pendant 48 heures, et une pâte à pancakes sans blancs montés tient une nuit. Les œufs sont la seule chose qui se cuisine à la minute.")
+  (dict "q" "Combien coûte un brunch fait maison ?" "a" "Entre 4 et 7 euros par personne pour une table complète, contre 25 à 35 euros dans une adresse parisienne. L'écart tient presque entièrement aux boissons et au service.")
+}}
+{{ end }}
+<section class="section-faq">
+    <div class="container-narrow">
+        <div class="section-head section-head-center" data-reveal>
+            <span class="section-kicker">FAQ</span>
+            <h2 class="section-title">{{ if $en }}The questions people actually ask{{ else }}Les questions qu'on se pose vraiment{{ end }}</h2>
+        </div>
+        <div class="faq" data-reveal>
+            {{ range $faq }}
+            <details>
+                <summary>{{ partial "fr-typo.html" .q }}</summary>
+                <p>{{ .a }}</p>
+            </details>
+            {{ end }}
+        </div>
+    </div>
+</section>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {{ range $i, $f := $faq }}{{ if $i }},{{ end }}
+    { "@type": "Question", "name": {{ $f.q }}, "acceptedAnswer": { "@type": "Answer", "text": {{ $f.a }} } }
+    {{ end }}
+  ]
+}
+</script>
 
 {{ end }}

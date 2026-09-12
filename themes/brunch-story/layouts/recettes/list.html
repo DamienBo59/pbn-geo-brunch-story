@@ -39,26 +39,7 @@
     </div>
     <div class="recipe-grid">
       {{ range $items.ByDate.Reverse }}
-      {{ $r := .Params.recipe }}
-      <article class="recipe-card">
-        <a href="{{ .RelPermalink }}" aria-label="{{ .Title }}">
-          {{ if .Params.image }}
-          <img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="recipe-card-img" loading="lazy" width="400" height="300">
-          {{ else }}
-          <span class="recipe-card-ph" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>
-          {{ end }}
-        </a>
-        <div class="recipe-card-body">
-          {{ with $r.badges }}<ul class="recipe-badges">{{ range first 2 . }}<li class="tag">{{ . }}</li>{{ end }}</ul>{{ end }}
-          <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
-          <p class="recipe-card-desc">{{ .Description }}</p>
-          <p class="article-meta">
-            {{ with $r.totalTime }}{{ partial "icon.html" "clock" }} {{ . }} min{{ end }}
-            {{ with $r.calories }}<span class="meta-separator">·</span>{{ partial "icon.html" "flame" }} {{ . }} kcal{{ end }}
-            {{ with $r.difficulty }}<span class="meta-separator">·</span>{{ partial "icon.html" "gauge" }} {{ . }}{{ end }}
-          </p>
-        </div>
-      </article>
+      {{ partial "recipe-card.html" (dict "page" .) }}
       {{ end }}
     </div>
   </section>
@@ -75,16 +56,7 @@
     <h2 id="autres">{{ if $en }}More recipes{{ else }}Les autres recettes{{ end }}</h2>
     <div class="recipe-grid">
       {{ range . }}
-      <article class="recipe-card">
-        <a href="{{ .RelPermalink }}" aria-label="{{ .Title }}">
-          {{ if .Params.image }}<img src="{{ .Params.image | relURL }}" alt="{{ .Params.imageAlt | default .Title }}" class="recipe-card-img" loading="lazy" width="400" height="300">
-          {{ else }}<span class="recipe-card-ph" aria-hidden="true">{{ slicestr .Title 0 1 }}</span>{{ end }}
-        </a>
-        <div class="recipe-card-body">
-          <h3><a href="{{ .RelPermalink }}">{{ partial "fr-typo.html" .Title }}</a></h3>
-          <p class="recipe-card-desc">{{ .Description }}</p>
-        </div>
-      </article>
+      {{ partial "recipe-card.html" (dict "page" .) }}
       {{ end }}
     </div>
   </section>

@@ -2,96 +2,67 @@
 {{ $lang := .Site.Language.Lang }}
 
 <article class="single-article">
-    <div class="container">
 
-        <!-- Breadcrumb visuel -->
-        <nav class="breadcrumb" aria-label="{{ if eq $lang "en" }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
-            <ol class="breadcrumb-list">
-                <li class="breadcrumb-item">
-                    <a href="{{ "/" | relURL }}">{{ if eq $lang "en" }}Home{{ else }}Accueil{{ end }}</a>
-                    <svg class="breadcrumb-sep" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 4 10 8 6 12" /></svg>
-                </li>
-                <li class="breadcrumb-item">
-                    <a href="{{ "blog/" | relURL }}">Blog</a>
-                    <svg class="breadcrumb-sep" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 4 10 8 6 12" /></svg>
-                </li>
-                {{ with .Params.categories }}
-                <li class="breadcrumb-item">
-                    <a href="{{ printf "categories/%s/" (index . 0 | urlize) | relURL }}">{{ index . 0 }}</a>
-                    <svg class="breadcrumb-sep" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 4 10 8 6 12" /></svg>
-                </li>
-                {{ end }}
-                <li class="breadcrumb-item">
-                    <span aria-current="page">{{ .Title }}</span>
-                </li>
-            </ol>
-        </nav>
+    {{ $cat := "" }}{{ with .Params.categories }}{{ $cat = index . 0 }}{{ end }}
+    {{ $authorData := dict }}{{ with .Params.author }}{{ $authorData = index hugo.Data.authors . }}{{ end }}
 
-        <!-- Hero article (titre + image cote a cote) -->
-        <div class="article-hero">
-            <div class="article-hero-text">
-                <div class="article-meta">
-                    {{ with .Params.categories }}
-                    <a href="{{ printf "categories/%s/" (index . 0 | urlize) | relURL }}" class="article-category">{{ index . 0 }}</a>
+    <!-- En-tete editorial : la typographie d'abord. Les recettes font l'inverse
+         (photo pleine largeur puis carte), c'est ce qui distingue les deux gabarits. -->
+    <header class="post-head">
+        <div class="post-head-inner">
+            <nav class="breadcrumb" aria-label="{{ if eq $lang "en" }}Breadcrumb{{ else }}Fil d'Ariane{{ end }}">
+                <ol class="breadcrumb-list">
+                    <li class="breadcrumb-item"><a href="{{ "/" | relURL }}">{{ if eq $lang "en" }}Home{{ else }}Accueil{{ end }}</a></li>
+                    <li class="breadcrumb-sep" aria-hidden="true">/</li>
+                    <li class="breadcrumb-item"><a href="{{ (cond (eq $lang "en") "/en/blog/" "/blog/") | relURL }}">Blog</a></li>
+                    {{ with $cat }}
+                    <li class="breadcrumb-sep" aria-hidden="true">/</li>
+                    <li class="breadcrumb-item"><a href="{{ printf "categories/%s/" (. | urlize) | relLangURL }}">{{ . }}</a></li>
                     {{ end }}
-                    <span class="meta-separator">·</span>
-                    <time class="article-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ time.Format "2 January 2006" .Date }}</time>
-                    <span class="meta-separator">·</span>
-                    <span class="article-reading-time">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        {{ .ReadingTime }} {{ if eq $lang "en" }}min read{{ else }}min de lecture{{ end }}
-                    </span>
-                </div>
+                </ol>
+            </nav>
 
-                <h1 class="article-title">{{ .Params.h1 | default .Title }}</h1>
-                {{ with .Description }}
-                <p class="article-description">{{ . }}</p>
-                {{ end }}
-
-                {{ $authorData := dict }}
-                {{ with .Params.author }}
-                    {{ $authorData = index hugo.Data.authors . }}
-                {{ end }}
-                <div class="article-author-bar">
-                    {{ with $authorData }}
-                    <div class="author-info">
-                        {{ with .avatar }}
-                        <img src="{{ . | relURL }}" alt="{{ $authorData.name }}" class="author-avatar" width="48" height="48" loading="lazy">
-                        {{ else }}
-                        <div class="author-avatar author-avatar-placeholder" aria-hidden="true">{{ slicestr .name 0 1 }}</div>
-                        {{ end }}
-                        <div class="author-text">
-                            <span class="author-name">{{ .name }}</span>
-                            {{ with index .role $lang }}
-                            <span class="author-role">{{ . }}</span>
-                            {{ end }}
-                        </div>
-                    </div>
-                    {{ end }}
-                    {{ if ne (.Lastmod.Format "2006-01-02") (.Date.Format "2006-01-02") }}
-                    <div class="article-updated">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
-                        {{ if eq $lang "en" }}Updated on {{ time.Format "2 January 2006" .Lastmod }}{{ else }}Mis à jour le {{ time.Format "2 January 2006" .Lastmod }}{{ end }}
-                    </div>
-                    {{ end }}
-                </div>
-
-                <div class="article-tags">
-                    {{ range .Params.tags }}
-                    <a href="{{ "/tags/" | relURL }}{{ . | urlize }}/" class="tag">#{{ . }}</a>
-                    {{ end }}
-                </div>
-            </div>
-
-            {{ with .Params.image }}
-            <div class="article-hero-image">
-                <img src="{{ . | relURL }}" alt="{{ with $.Params.imageAlt }}{{ . }}{{ else }}{{ $.Title }}{{ end }}" width="600" height="400" loading="eager" fetchpriority="high">
-                {{ with $.Params.imageCredit }}
-                <small class="article-hero-image-credit">{{ . }}</small>
-                {{ end }}
-            </div>
+            {{ with $cat }}
+            <a href="{{ printf "categories/%s/" (. | urlize) | relLangURL }}" class="post-cat">{{ . }}</a>
             {{ end }}
+
+            <h1 class="post-title">{{ partial "fr-typo.html" (.Params.h1 | default .Title) }}</h1>
+
+            {{ with .Description }}<p class="post-standfirst">{{ partial "fr-typo.html" . }}</p>{{ end }}
+
+            <div class="post-byline">
+                {{ with $authorData }}
+                {{ with .avatar }}
+                <img src="{{ . | relURL }}" alt="{{ $authorData.name }}" class="author-avatar" width="44" height="44" loading="lazy">
+                {{ else }}
+                <span class="author-avatar author-avatar-placeholder" aria-hidden="true">{{ slicestr .name 0 1 }}</span>
+                {{ end }}
+                <span class="post-byline-who">
+                    <span class="author-name">{{ .name }}</span>
+                    {{ with index .role $lang }}<span class="author-role">{{ . }}</span>{{ end }}
+                </span>
+                {{ end }}
+                <span class="post-byline-meta">
+                    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ time.Format "2 January 2006" .Date }}</time>
+                    <span class="meta-separator">·</span>
+                    <span class="article-reading-time">{{ partial "icon.html" "clock" }}{{ .ReadingTime }} {{ if eq $lang "en" }}min read{{ else }}min de lecture{{ end }}</span>
+                    {{ if ne (.Lastmod.Format "2006-01-02") (.Date.Format "2006-01-02") }}
+                    <span class="meta-separator">·</span>
+                    <span class="article-updated">{{ if eq $lang "en" }}Updated {{ time.Format "2 January 2006" .Lastmod }}{{ else }}Mis à jour le {{ time.Format "2 January 2006" .Lastmod }}{{ end }}</span>
+                    {{ end }}
+                </span>
+            </div>
         </div>
+    </header>
+
+    {{ with .Params.image }}
+    <figure class="post-figure" data-parallax="0.12">
+        <img src="{{ . | relURL }}" alt="{{ with $.Params.imageAlt }}{{ . }}{{ else }}{{ $.Title }}{{ end }}" width="1600" height="760" loading="eager" fetchpriority="high">
+    </figure>
+    {{ with $.Params.imageCredit }}<p class="post-figure-credit">{{ . }}</p>{{ end }}
+    {{ end }}
+
+    <div class="container">
 
         <!-- Layout 2 colonnes : sidebar TOC + contenu -->
         <div class="article-layout">

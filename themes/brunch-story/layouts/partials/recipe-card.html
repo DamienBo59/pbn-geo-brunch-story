@@ -1,0 +1,34 @@
+{{- /* Carte recette. Anatomie reprise de Quitoque : pastille de duree incrustee
+     sur la photo, badges, titre, puis une ligne de reperes.
+     Difference assumee : leurs cartes portent un Nutri-Score et un Score Carbone.
+     Le Nutri-Score se calcule sur des valeurs pour 100 g, avec les acides gras
+     satures et le pourcentage de fruits et legumes, que nous n'avons pas. En
+     afficher un approximatif serait un faux label reglemente. On montre donc les
+     chiffres reels de la recette, qui informent autant sans rien inventer. */ -}}
+{{- $p := .page -}}
+{{- $en := eq $p.Site.Language.Lang "en" -}}
+{{- $r := $p.Params.recipe -}}
+<article class="recipe-card" data-reveal>
+  <a href="{{ $p.RelPermalink }}" class="recipe-card-media" aria-label="{{ $p.Title }}">
+    {{ if $p.Params.image }}
+    <img src="{{ $p.Params.image | relURL }}" alt="{{ $p.Params.imageAlt | default $p.Title }}" class="recipe-card-img" loading="lazy" width="400" height="300">
+    {{ else }}
+    <span class="recipe-card-ph" aria-hidden="true">{{ slicestr $p.Title 0 1 }}</span>
+    {{ end }}
+    {{ with $r.totalTime }}<span class="recipe-card-time">{{ partial "icon.html" "clock" }}{{ . }} min</span>{{ end }}
+  </a>
+  <div class="recipe-card-body">
+    {{ with $r.badges }}<ul class="recipe-badges">{{ range first 2 . }}<li class="tag">{{ . }}</li>{{ end }}</ul>{{ end }}
+    <h3><a href="{{ $p.RelPermalink }}">{{ partial "fr-typo.html" $p.Title }}</a></h3>
+    <p class="recipe-card-desc">{{ $p.Description | truncate 104 }}</p>
+    <ul class="recipe-facts">
+      {{ with $r.calories }}<li>{{ partial "icon.html" "flame" }}<span><strong>{{ . }}</strong> kcal</span></li>{{ end }}
+      {{ with $r.nutrition }}
+      {{ with .protein }}<li>{{ partial "icon.html" "nut" }}<span><strong>{{ . }} g</strong> {{ if $en }}protein{{ else }}protéines{{ end }}</span></li>{{ end }}
+      {{ with .fiber }}<li>{{ partial "icon.html" "wheat" }}<span><strong>{{ . }} g</strong> {{ if $en }}fibre{{ else }}fibres{{ end }}</span></li>{{ end }}
+      {{ end }}
+      {{ with $r.difficulty }}<li>{{ partial "icon.html" "gauge" }}<span>{{ . }}</span></li>{{ end }}
+    </ul>
+    <p class="recipe-facts-note">{{ if $en }}Per serving, estimated from the ingredients{{ else }}Par portion, estimé depuis les ingrédients{{ end }}</p>
+  </div>
+</article>
