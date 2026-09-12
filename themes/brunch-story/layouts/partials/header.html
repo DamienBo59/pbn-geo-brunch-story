@@ -103,7 +103,10 @@
     <nav class="nav-mobile" id="nav-mobile" aria-label="{{ i18n "mobile_nav" }}">
         {{ with $hub }}
         <div class="acc">
-            <button class="acc-head" aria-expanded="false">{{ if $en }}Recipes{{ else }}Recettes{{ end }}{{ partial "icon.html" "chevron" }}</button>
+            <div class="acc-head">
+                <a href="{{ .Permalink }}" class="acc-head-link">{{ if $en }}Recipes{{ else }}Recettes{{ end }}</a>
+                <button class="acc-toggle" aria-expanded="false" aria-label="{{ if $en }}Show recipe families{{ else }}Afficher les familles de recettes{{ end }}">{{ partial "icon.html" "chevron" }}</button>
+            </div>
             <div class="acc-body">
                 {{ range .Params.groups }}
                 <a href="{{ $.Permalink }}{{ with .anchor }}#{{ . }}{{ end }}" class="acc-link">
@@ -115,7 +118,10 @@
         </div>
         {{ end }}
         <div class="acc">
-            <button class="acc-head" aria-expanded="false">{{ if $en }}Blog{{ else }}Le blog{{ end }}{{ partial "icon.html" "chevron" }}</button>
+            <div class="acc-head">
+                <a href="{{ (cond $en "/en/blog/" "/blog/") | relURL }}" class="acc-head-link">{{ if $en }}Blog{{ else }}Le blog{{ end }}</a>
+                <button class="acc-toggle" aria-expanded="false" aria-label="{{ if $en }}Show sections{{ else }}Afficher les rubriques{{ end }}">{{ partial "icon.html" "chevron" }}</button>
+            </div>
             <div class="acc-body">
                 {{ range $name, $terms := .Site.Taxonomies.categories }}
                 {{ $term := $.Site.GetPage (printf "/categories/%s" $name) }}
@@ -194,10 +200,14 @@
       document.body.classList.toggle('nav-locked', isOpen);
     });
   }
-  document.querySelectorAll('.acc-head').forEach(function (head) {
-    head.addEventListener('click', function () {
-      var open = head.parentElement.classList.toggle('open');
-      head.setAttribute('aria-expanded', String(open));
+  /* Le libelle est un lien vers l'archive ; seul le chevron deplie. Avant, tout
+     l'en-tete etait un <button> : on ne pouvait pas atteindre l'archive depuis
+     le menu mobile. */
+  document.querySelectorAll('.acc-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var open = btn.closest('.acc').classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
     });
   });
 })();

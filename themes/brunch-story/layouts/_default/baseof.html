@@ -14,9 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet" media="print" data-media="all">
     <script>document.querySelectorAll('link[data-media]').forEach(function(l){l.addEventListener('load',function(){l.media=l.dataset.media})});</script>
 
+    {{/* Empreinte sur le nom de fichier : sans elle, la feuille est servie a
+         /css/main.css avec un cache-control de 600 s, et un correctif de design
+         pouvait rester invisible dans le navigateur d'un lecteur deja venu. */}}
     {{ $css := resources.Get "css/main.css" }}
     {{ if $css }}
-        <link rel="stylesheet" href="{{ $css.RelPermalink }}">
+        {{ $css = $css | fingerprint "sha256" }}
+        <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
     {{ end }}
     <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
     <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">

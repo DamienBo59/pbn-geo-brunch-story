@@ -244,6 +244,12 @@ strong, b { font-weight: 700; color: var(--ink); }
 .nav-item { position: relative; }
 
 .nav-link {
+    /* Le declencheur passe au-dessus de son propre panneau. La hauteur de
+       l'element de nav est fractionnaire (47,4 px), si bien que le bord haut du
+       panneau, cale sur 100%, mordait la derniere rangee de pixels du lien :
+       une bande d'un pixel qui volait le clic pile la ou le curseur se pose en
+       descendant vers le menu. */
+    position: relative; z-index: 121;
     display: inline-flex; align-items: center; gap: .3rem;
     font-family: var(--font-ui); font-size: var(--fs-m); font-weight: 700;
     color: var(--ink); padding: .6rem .85rem; border-radius: var(--radius-pill);
@@ -264,8 +270,11 @@ strong, b { font-weight: 700; color: var(--ink); }
     transform: translate(0, 8px);
     opacity: 0; visibility: hidden; pointer-events: none;
     transition: opacity var(--transition-base), transform var(--transition-base), visibility var(--transition-base);
+    transition-delay: 110ms;
     z-index: 120;
 }
+/* fermeture immediate, ouverture legerement retardee */
+.nav-item:not(:hover):not(.open) .mega { transition-delay: 0ms; }
 .nav-item:hover .mega,
 .nav-item:focus-within .mega,
 .nav-item.open .mega { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(0, 0); }
@@ -368,13 +377,23 @@ strong, b { font-weight: 700; color: var(--ink); }
 }
 .nav-mobile.open { display: block; }
 .acc { border-bottom: 1px solid var(--line); }
-.acc-head {
-    display: flex; align-items: center; justify-content: space-between; width: 100%;
+/* Le libelle mene a l'archive, le chevron deplie. Les deux zones sont distinctes
+   et assez grandes pour le pouce. */
+.acc-head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.acc-head-link {
+    flex: 1; display: block; color: var(--ink);
     font-family: var(--font-display); font-weight: 800; font-size: var(--fs-xl);
-    letter-spacing: var(--tracking-tight); padding: var(--space-sm) 0; text-align: left;
+    letter-spacing: var(--tracking-tight); padding: var(--space-sm) 0;
 }
-.acc-head .ico { width: 20px; height: 20px; transition: transform var(--transition-base); color: var(--ink-soft); }
-.acc.open .acc-head .ico { transform: rotate(180deg); }
+.acc-head-link:hover { color: var(--brand); }
+.acc-toggle {
+    display: grid; place-items: center; flex: none;
+    width: 46px; height: 46px; border-radius: var(--radius-pill);
+    transition: background var(--transition-fast);
+}
+.acc-toggle:hover { background: var(--sand); }
+.acc-toggle .ico { width: 20px; height: 20px; color: var(--ink-soft); transition: transform var(--transition-base); }
+.acc.open .acc-toggle .ico { transform: rotate(180deg); }
 .acc-body { display: none; padding-bottom: var(--space-sm); }
 .acc.open .acc-body { display: block; }
 .acc-link {
