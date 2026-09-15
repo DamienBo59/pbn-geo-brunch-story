@@ -175,50 +175,50 @@ articles:
     volume: 2769
     kd: null
     scheduled_date: "2026-09-15"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-16"
+    published_url_fr: "https://www.brunch-story.fr/blog/smoothie-fruits-rouges/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/berry-smoothie/"
     error: null
   - kw: "pain perdu sans oeuf"
     category: "Oeufs et salé"
     volume: 2417
     kd: null
     scheduled_date: "2026-09-18"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-16"
+    published_url_fr: "https://www.brunch-story.fr/blog/pain-perdu-sans-oeuf/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/eggless-french-toast/"
     error: null
   - kw: "petit déjeuner turc"
     category: "Organiser un brunch"
     volume: 1600
     kd: null
     scheduled_date: "2026-09-22"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-16"
+    published_url_fr: "https://www.brunch-story.fr/blog/petit-dejeuner-turc/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/turkish-breakfast/"
     error: null
   - kw: "bienfaits des graines de chia"
     category: "Petit déjeuner sain"
     volume: 1900
     kd: null
     scheduled_date: "2026-09-25"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-16"
+    published_url_fr: "https://www.brunch-story.fr/blog/bienfaits-graines-de-chia/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/chia-seed-benefits/"
     error: null
   - kw: "recette brioche à l'ancienne"
     category: "Pancakes et sucré"
     volume: 2700
     kd: null
     scheduled_date: "2026-09-29"
-    status: todo
-    published_date: null
-    published_url_fr: null
-    published_url_en: null
+    status: done
+    published_date: "2026-09-16"
+    published_url_fr: "https://www.brunch-story.fr/blog/recette-brioche-a-l-ancienne/"
+    published_url_en: "https://www.brunch-story.fr/en/blog/old-fashioned-brioche/"
     error: null
   - kw: "smoothie au concombre"
     category: "Boissons du matin"

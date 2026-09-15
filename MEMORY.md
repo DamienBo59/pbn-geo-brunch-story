@@ -39,3 +39,27 @@ Filtres : 3 mots ou plus, volume 150 a 3 000, KGR sous 0,6 ; frontiere `gouter-g
 Les 5 versions EN correspondantes sont publiees sous `/en/blog/`. 72 liens internes verifies, aucun casse. Maillage croise entre les 5 articles du lot.
 
 **Images : source changee.** `api.openverse.org` est injoignable depuis le Mac (timeout, et 403 sur `openverse.org`), donc `.claude/scripts/fetch-image.sh` echoue en code 28. Les 5 images viennent de **Wikimedia Commons**, l'une des sources federees par Openverse, via l'API `commons.wikimedia.org/w/api.php`, avec filtrage sur les licences autorisant l'usage commercial (CC0, CC BY, CC BY-SA, domaine public) et exclusion de `-nc` et `-nd`.
+
+## Semaine du 2026-09-16
+
+**5 articles publies (FR + EN), un par rubrique, en publication immediate.** Lot demande explicitement par Damien le 2026-09-16, produit en mode A de `/create-article-seo` (roadmap du blog, 5 entrees `todo` les plus anciennes) mais avec `publishDate` ramenee au jour meme au lieu des `scheduled_date` du 15 au 29 septembre. Les entrees passent donc directement en `status: done` dans la roadmap, leur `scheduled_date` d'origine etant conservee pour garder la trace de l'ecart.
+
+**Troisieme ecart au repere hebdomadaire de 4 articles/semaine**, apres ceux du 2026-09-06 et du 2026-09-12 qui etaient annonces comme les deux derniers. Celui-ci est une demande directe, pas une decision de la skill. Le rythme de 2 par semaine reste la cible.
+
+| Article FR | Categorie | Mot-cle cible | Volume |
+|---|---|---|---|
+| [Smoothie fruits rouges : les proportions](https://www.brunch-story.fr/blog/smoothie-fruits-rouges/) | Boissons du matin | `smoothie fruits rouges` | 2 769 |
+| [Pain perdu sans œuf : la methode](https://www.brunch-story.fr/blog/pain-perdu-sans-oeuf/) | Oeufs et sale | `pain perdu sans oeuf` | 2 417 |
+| [Petit dejeuner turc : ce qu'il y a dessus](https://www.brunch-story.fr/blog/petit-dejeuner-turc/) | Organiser un brunch | `petit dejeuner turc` | 1 600 |
+| [Bienfaits des graines de chia : les faits](https://www.brunch-story.fr/blog/bienfaits-graines-de-chia/) | Petit dejeuner sain | `bienfaits des graines de chia` | 1 900 |
+| [Recette brioche a l'ancienne : la methode](https://www.brunch-story.fr/blog/recette-brioche-a-l-ancienne/) | Pancakes et sucre | `recette brioche a l'ancienne` | 2 700 |
+
+Les 5 versions EN sont publiees sous `/en/blog/` : `berry-smoothie`, `eggless-french-toast`, `turkish-breakfast`, `chia-seed-benefits`, `old-fashioned-brioche`. Maillage croise entre les 5 articles du lot, 4 a 5 liens internes contextuels par article, tous verifies sur le site genere.
+
+**Analyse SERP en mode degrade assume** : le MCP `serpapi` n'est pas declare cote perso, donc l'analyse s'est faite par recherche web (titres et snippets), sans fetch des concurrents. Aucun geant ne tient le top 3 sur les 5 requetes.
+
+**Images : 2 rejets sur 5 au controle visuel**, ce qui confirme la mesure du 2026-09-12. `berry smoothie` a remonte un gobelet McDonald's McCafe, et `brioche bread` un rayon de supermarche avec des sachets Reflets de France : deux visuels de marque qui contredisent en plus l'angle « ce qui se refait mieux chez soi ». Relancer le script avec une autre query ne suffit pas toujours : le registre `hero-sources.json` n'exclut que les photos utilisees par un AUTRE slug, donc un second passage sur le meme slug peut retomber sur la photo rejetee (c'est arrive pour la brioche). La parade est de chercher directement dans l'API Commons et de deposer l'image a la main, puis de corriger l'entree du registre.
+
+**Piege de fuseau horaire sur `publishDate`** : une date seule (`"2026-09-16"`) est lue par Hugo comme minuit **UTC**. Ecrite depuis Paris entre minuit et 2 h du matin, elle est donc dans le futur et `buildFuture: false` masque l'article, sans aucune erreur au build. Le correctif applique est une date horodatee avec fuseau explicite (`"2026-09-15T23:00:00+02:00"`), `date` et `lastmod` restant au 2026-09-16 puisque c'est `.Date` que le theme affiche.
+
+**A traiter, defaut anterieur au lot** : sur toutes les pages EN, les liens de tags pointent vers `/tags/<slug-en>/` au lieu de `/en/tags/<slug-en>/`, soit **63 liens internes en 404**. Les pages cibles existent bien sous `/en/tags/`. La cause est une URL ecrite en dur dans `themes/brunch-story/layouts/_default/single.html` ligne 92 (`{{ "/tags/" | relURL }}`), qui ignore la langue courante. Le defaut touchait deja les 10 articles EN publies avant ce lot, il n'a pas ete corrige ici pour ne pas melanger un changement de theme a une publication.
